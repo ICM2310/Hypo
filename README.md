@@ -6,7 +6,11 @@
 ### Integrantes:
 
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Santiago Aviles Tibocha:
+- 20 años
+- 6to semestre de Ingenieria de Sistemas
+- Enfoques en Analisis de Datos, Inteligencia Artificial y Desarrollo
 
+<img src= "https://user-images.githubusercontent.com/110882455/218939355-d47da819-0e06-4313-a88d-26bf926bc7ae.jpg" width="300">
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Gabriela Mercedes Luigi:
 
 - 20 años 
@@ -25,3 +29,4 @@
 
 
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Sebastian Vergara:
+
