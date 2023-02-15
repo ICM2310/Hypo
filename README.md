@@ -17,4 +17,7 @@
 
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Cesar Alejandro Maldonado:
 
+<img src="https://user-images.githubusercontent.com/110882173/218919435-1c17e9ed-6d60-4a9f-98c5-7012bb55ae73.png" width=300=>
+
+
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Sebastian Vergara:
