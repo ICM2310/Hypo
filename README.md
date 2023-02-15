@@ -31,3 +31,10 @@
 
 <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">Sebastian Vergara:
 
+- 20 Años
+- 6to semestre de ingenieria de sistemas.
+- Diseño de interfaces, UX, y frontend development
+<img src="https://media.licdn.com/dms/image/C5603AQH5b3K6dEyQJw/profile-displayphoto-shrink_800_800/0/1661795303502?e=1681948800&v=beta&t=Ty1JV5PnbWbLaomdaXZRH447D92MYoLNwys6QvolUMc" width="300">
+
+
+
