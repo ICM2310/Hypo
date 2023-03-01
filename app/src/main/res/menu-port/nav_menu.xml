@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/location"
+        android:icon="@drawable/icon_location"
+        android:title="Location"
+        android:iconTint="@color/disabled_gray"/>
+    <item
+        android:id="@+id/messages"
+        android:icon="@drawable/icon_message"
+        android:title="Messages"
+        android:iconTint="@color/disabled_gray"/>
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/icon_menulogo"
+        android:title="Home"
+        android:iconTint="@color/disabled_gray"/>
+    <item
+        android:id="@+id/rolls"
+        android:icon="@drawable/icon_rolls"
+        android:title="Rolls"
+        android:iconTint="@color/disabled_gray"/>
+    <item
+        android:id="@+id/store"
+        android:icon="@drawable/icon_store"
+        android:title="Store"
+        android:iconTint="@color/disabled_gray"/>
+
+</menu>
