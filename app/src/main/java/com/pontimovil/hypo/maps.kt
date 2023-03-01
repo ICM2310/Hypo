@@ -56,7 +56,6 @@ class maps : Fragment() {
         }
         childFragmentManager.beginTransaction().apply {
             add(topBar.id, topBarFragment, "topBar")
-
             commit()
         }
 
