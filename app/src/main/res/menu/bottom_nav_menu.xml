@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/maps"
+        android:icon="@drawable/icon_location"
+        android:title="Mapa" />
+    <item
+        android:id="@+id/chat"
+        android:icon="@drawable/icon_message"
+        android:title="Chat" />
+    <item
+        android:id="@+id/mainCamera"
+        android:icon="@drawable/icon_menulogo"
+        android:title="Home" />
+    <item
+        android:id="@+id/rolls"
+        android:icon="@drawable/icon_rolls"
+        android:title="Rolls" />
+    <item
+        android:id="@+id/store"
+        android:icon="@drawable/icon_store"
+        android:title="Tienda"/>
+</menu>
