@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import com.pontimovil.hypo.cameraFrames.polaroidSnaptouch
+import com.pontimovil.hypo.databinding.FragmentMainCameraBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,21 +23,37 @@ class mainCamera : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var binding: FragmentMainCameraBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_camera, container, false)
+        binding = FragmentMainCameraBinding.inflate(inflater, container, false)
+        val cameraContainLayout = binding.cameraContain
+        val rollerContainLayout = binding.rollContain
+
+        // Begin a transaction for the FragmentManager
+        childFragmentManager.beginTransaction().apply {
+
+            // Add the polaroidSnaptouch fragment to the cameraContain FrameLayout
+            add(cameraContainLayout.id, polaroidSnaptouch.newInstance("", ""), "polaroidSnaptouch")
+            // Add the rollerSelector fragment to the rollerContain FrameLayout
+            add(rollerContainLayout.id, rollSelectorModern.newInstance("", ""), "rollerSelector")
+            // Commit the transaction
+            commit()
+        }
+
+        return binding.root
     }
 
     companion object {

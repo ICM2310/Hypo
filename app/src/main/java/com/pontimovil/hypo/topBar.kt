@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pontimovil.hypo.databinding.FragmentChatBinding
+import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -14,14 +14,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [chat.newInstance] factory method to
+ * Use the [topBar.newInstance] factory method to
  * create an instance of this fragment.
  */
-class chat : Fragment() {
+class topBar : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var binding: FragmentChatBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -30,28 +30,18 @@ class chat : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        binding = FragmentChatBinding.inflate(inflater, container, false)
-        val topBar = binding.topBar
-        val fragmentName = "Chat" // replace with the fragment name you want to use
-        val bundle = Bundle().apply {
-            putString("fragmentName", fragmentName)
-        }
-        val topBarFragment = topBar().apply {
-            arguments = bundle
-        }
-        childFragmentManager.beginTransaction().apply {
-            add(topBar.id, topBarFragment, "topBar")
-            commit()
-        }
-
-        return binding.root
+        return inflater.inflate(R.layout.fragment_top_bar, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val fragmentName = arguments?.getString("fragmentName") ?: "Unknown" // default to "Unknown" if fragmentName is not set
+        val frameName = view.findViewById<TextView>(R.id.frameName)
+        frameName.text = fragmentName
+    }
 
     companion object {
         /**
@@ -60,16 +50,15 @@ class chat : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment chat.
+         * @return A new instance of fragment topBar.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            chat().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        @JvmStatic fun newInstance(param1: String, param2: String) =
+                topBar().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                        putString(ARG_PARAM2, param2)
+                    }
                 }
-            }
     }
 }
