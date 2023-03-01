@@ -1,4 +1,4 @@
-# Hypo
+# <img src="https://github.com/ICM2310/Hypo/blob/main/app/src/main/assets/polaroidSnaptouch/hypologo.svg" width="300">
 
 
 ## Grupo: Espanta tiburones
