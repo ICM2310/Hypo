@@ -1,0 +1,86 @@
+{
+  "name": "cam_center",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "koN5QEEdtip2bmudRF15RR",
+    "node": "56:568",
+    "version": "3093552237",
+    "component-id": "7327664846d9693bf1afe81197fa589e1a0644f9"
+  },
+  "default": "CamCenter",
+  "documentation": "Lente de Centro de la camara Polaroid Snaptouch",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Lens"
+      },
+      {
+        "type": "vector",
+        "id": "Cam"
+      }
+    ],
+    "modes": {
+      "CamCenter": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": "false",
+            "children": [
+              "Lens",
+              "Cam"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Lens",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "lens.svg"
+          },
+          {
+            "id": "Cam",
+            "margin": "77.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "cam.svg"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "CamCenter",
+      "size": {
+        "width": 300.0,
+        "height": 300.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

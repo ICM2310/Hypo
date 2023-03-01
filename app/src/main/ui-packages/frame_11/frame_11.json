@@ -1,0 +1,379 @@
+{
+  "name": "frame_11",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "koN5QEEdtip2bmudRF15RR",
+    "node": "23:819",
+    "version": "3093482008",
+    "component-id": "76d16f5c223d5675906b3c5980ce2103b309cbaa"
+  },
+  "default": "Frame 11",
+  "documentation": "Elemento Barra Superior",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "RighButtonArray"
+      },
+      {
+        "type": "text",
+        "id": "Chat"
+      },
+      {
+        "type": "group",
+        "id": "LeftButtonArray"
+      },
+      {
+        "type": "image",
+        "id": "ProfilePicture"
+      },
+      {
+        "type": "group",
+        "id": "Button1"
+      },
+      {
+        "type": "vector",
+        "id": "SearchButton"
+      },
+      {
+        "type": "vector",
+        "id": "Search"
+      },
+      {
+        "type": "group",
+        "id": "Button2"
+      },
+      {
+        "type": "group",
+        "id": "Button3"
+      },
+      {
+        "type": "vector",
+        "id": "ButtonAdd"
+      },
+      {
+        "type": "vector",
+        "id": "Add"
+      },
+      {
+        "type": "vector",
+        "id": "ButtonThreeDots"
+      },
+      {
+        "type": "vector",
+        "id": "ThreeDots"
+      }
+    ],
+    "modes": {
+      "Frame 11": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "31.0",
+              "top": "20.0",
+              "right": "31.0",
+              "bottom": "20.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "RighButtonArray",
+              "Chat",
+              "LeftButtonArray"
+            ],
+            "item-spacing": "65.0"
+          },
+          {
+            "id": "RighButtonArray",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "ProfilePicture",
+              "Button1"
+            ],
+            "item-spacing": "10.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "Chat",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Chat",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "30.44736671447754",
+            "line-height": "1.1933594221054453",
+            "typeface": "SF Pro Display"
+          },
+          {
+            "id": "LeftButtonArray",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "Button2",
+              "Button3"
+            ],
+            "item-spacing": "10.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "ProfilePicture",
+            "border-radius": "50.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "44.0"
+              }
+            },
+            "image-content": "profile_picture.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Button1",
+            "tap-handler": "$search",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "SearchButton",
+              "Search"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "SearchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "vector-content": "search_button.svg"
+          },
+          {
+            "id": "Search",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "11.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "11.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              }
+            },
+            "vector-content": "search.svg"
+          },
+          {
+            "id": "Button2",
+            "tap-handler": "$add",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "ButtonAdd",
+              "Add"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Button3",
+            "tap-handler": "$settings",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "ButtonThreeDots",
+              "ThreeDots"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "ButtonAdd",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "vector-content": "button_add.svg"
+          },
+          {
+            "id": "Add",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "12.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "15.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "22.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "16.0"
+              }
+            },
+            "vector-content": "add.svg"
+          },
+          {
+            "id": "ButtonThreeDots",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "45.0"
+              }
+            },
+            "vector-content": "button_three_dots.svg"
+          },
+          {
+            "id": "ThreeDots",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "9.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "20.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "27.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "6.0"
+              }
+            },
+            "vector-content": "three_dots.svg"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "search": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": "Busqueda"
+    },
+    "add": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": "Añadir un amigo"
+    },
+    "settings": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": "Configuracion"
+    }
+  },
+  "previews": [
+    {
+      "design": "Frame 11",
+      "size": {
+        "width": 430.0,
+        "height": 85.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
