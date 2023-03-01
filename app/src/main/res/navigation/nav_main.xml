@@ -20,4 +20,14 @@
         android:name="com.pontimovil.hypo.maps"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/rolls"
+        android:name="com.pontimovil.hypo.rolls"
+        android:label="fragment_rolls"
+        tools:layout="@layout/fragment_rolls" />
+    <fragment
+        android:id="@+id/store"
+        android:name="com.pontimovil.hypo.store"
+        android:label="fragment_store"
+        tools:layout="@layout/fragment_store" />
 </navigation>

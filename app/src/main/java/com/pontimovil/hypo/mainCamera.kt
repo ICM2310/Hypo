@@ -15,47 +15,47 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * A simple [Fragment] subclass.
- * Use the [mainCamera.newInstance] factory method to
- * create an instance of this fragment.
+ * Fragmento principal de la cámara, contiene los fragments de la cámara y el selector de rollos
+ *
  */
-class mainCamera : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var binding: FragmentMainCameraBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+class mainCamera : Fragment() { // mainCamera es el fragmento principal de la cámara, contiene los fragments de la cámara y el selector de rollos, se encarga de la comunicación entre ellos
+    private var param1: String? = null // Parámetros de la cámara
+    private var param2: String? = null // Parámetros de la cámara
+    private lateinit var binding: FragmentMainCameraBinding // Binding del fragmento, contiene los layouts de la cámara y el selector de rollos
+    override fun onCreate(savedInstanceState: Bundle?) { // Se ejecuta al crear el fragmento
+        super.onCreate(savedInstanceState) // Se ejecuta el onCreate del padre
+        arguments?.let { // Se comprueba si se han pasado argumentos
+            param1 = it.getString(ARG_PARAM1) // Se asignan los argumentos a los parámetros
+            param2 = it.getString(ARG_PARAM2) // Se asignan los argumentos a los parámetros
         }
 
 
     }
 
+    /**
+     * onCreateView se ejecuta al crear la vista del fragmento, se encarga de añadir los fragments de la cámara y el selector de rollos
+     */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMainCameraBinding.inflate(inflater, container, false)
-        val cameraContainLayout = binding.cameraContain
-        val rollerContainLayout = binding.rollContain
+        inflater: LayoutInflater, container: ViewGroup?, // Se pasan los parámetros de la vista. Inflater es el layoutInflater, container es el ViewGroup que contiene el fragmento
+        savedInstanceState: Bundle? // Se pasa el estado de la instancia, en este caso no se usa, pero es necesario para el override
+    ): View? { // Se devuelve la vista del fragmento
+        binding = FragmentMainCameraBinding.inflate(inflater, container, false) // Se infla el binding del fragmento (Recuerda que el binding es el archivo xml que contiene los layouts de la cámara y el selector de rollos, inflar es convertir el xml en un objeto de la clase View)
+        val cameraContainLayout = binding.cameraContain // Se obtiene el FrameLayout que contiene la cámara
+        val rollerContainLayout = binding.rollContain // Se obtiene el FrameLayout que contiene el selector de rollos
 
-        // Begin a transaction for the FragmentManager
-        childFragmentManager.beginTransaction().apply {
+        childFragmentManager.beginTransaction().apply { // Se crea una transacción de fragmentos, se usa childFragmentManager porque el fragmento principal de la cámara es un fragmento dentro de otro fragmento
 
-            // Add the polaroidSnaptouch fragment to the cameraContain FrameLayout
-            add(cameraContainLayout.id, polaroidSnaptouch.newInstance("", ""), "polaroidSnaptouch")
-            // Add the rollerSelector fragment to the rollerContain FrameLayout
-            add(rollerContainLayout.id, rollSelectorModern.newInstance("", ""), "rollerSelector")
-            // Commit the transaction
-            commit()
+            add(cameraContainLayout.id, polaroidSnaptouch.newInstance("", ""), "polaroidSnaptouch") // Se añade el fragmento de la cámara al FrameLayout de la cámara
+            add(rollerContainLayout.id, rollSelectorModern.newInstance("", ""), "rollerSelector") // Se añade el fragmento del selector de rollos al FrameLayout del selector de rollos
+            commit() // Se ejecuta la transacción, es decir, se añaden los fragments a los FrameLayouts
         }
 
-        return binding.root
+        return binding.root // Se devuelve la vista del fragmento
     }
 
+    /**
+     * objeto companion, se usa para crear una instancia del fragmento
+     */
     companion object {
         /**
          * Use this factory method to create a new instance of

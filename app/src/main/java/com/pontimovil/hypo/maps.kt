@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.GradientDrawable.Orientation
+import com.pontimovil.hypo.databinding.FragmentMapsBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +20,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class maps : Fragment() {
+    private lateinit var binding: FragmentMapsBinding
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,8 +38,31 @@ class maps : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        binding = FragmentMapsBinding.inflate(inflater, container, false)
+
+        // Create gradient background for topBar
+        val colors = intArrayOf(0x00FFFFFF.toInt(), 0xFFFFFFFF.toInt()) // transparent to white
+
+        val gradient = GradientDrawable(Orientation.TOP_BOTTOM, colors)
+        binding.topBar.background = gradient
+
+        val topBar = binding.topBar
+        val fragmentName = "Mapa" // replace with the fragment name you want to use
+        val bundle = Bundle().apply {
+            putString("fragmentName", fragmentName)
+        }
+        val topBarFragment = topBar().apply {
+            arguments = bundle
+        }
+        childFragmentManager.beginTransaction().apply {
+            add(topBar.id, topBarFragment, "topBar")
+
+            commit()
+        }
+
+        return binding.root
     }
+
 
     companion object {
         /**
