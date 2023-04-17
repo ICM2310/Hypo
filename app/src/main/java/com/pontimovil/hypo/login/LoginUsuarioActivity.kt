@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.pontimovil.hypo.MainActivity
 import com.pontimovil.hypo.databinding.ActivityLoginUsuarioBinding
+import com.pontimovil.hypo.databinding.ActivityRegistroUsuarioBinding
 
 
 class LoginUsuarioActivity : AppCompatActivity() {
@@ -27,20 +28,29 @@ class LoginUsuarioActivity : AppCompatActivity() {
 
         binding.botonLogin.setOnClickListener{
             val email = binding.inputUsuarioLogin.text.toString()
-            val password = binding.inputUsuarioLogin.text.toString()
+            val password = binding.inputContrasenaLogin.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()){
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{
                     if(it.isSuccessful){
                         startActivity(Intent(baseContext, MainActivity::class.java))
-
                     }else{
-                        Toast.makeText(this, it.exception.toString(),Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, it.exception.toString(),Toast.LENGTH_LONG).show()
                     }
                 }
             }else{
                 Toast.makeText(this, "Uno o más campos están vacíos",Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.botonRegistro.setOnClickListener{
+            startActivity(Intent(baseContext, RegistroUsuarioActivity::class.java))
+        }
+    }
+    override fun onStart() {
+        super.onStart()
+
+        if(auth.currentUser != null){
+            startActivity(Intent(baseContext, MainActivity::class.java))
         }
     }
 }
