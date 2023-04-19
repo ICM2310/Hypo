@@ -33,7 +33,7 @@ class rolls : Fragment() {
     private lateinit var binding: FragmentRollsBinding
     private val PICK_IMAGE_REQUEST = 1
     private lateinit var imageView: ImageView
-
+    private val PERMISSION_CODE = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
