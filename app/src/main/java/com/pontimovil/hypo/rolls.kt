@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ class rolls : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentRollsBinding
-    private val REQUEST_IMAGE_CAPTURE = 1
+    private val PICK_IMAGE_REQUEST = 1
     private lateinit var imageView: ImageView
 
 
@@ -50,30 +51,32 @@ class rolls : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_rolls, container, false)
         binding = FragmentRollsBinding.inflate(layoutInflater)
+        imageView = view.findViewById(R.id.imageView5)
         binding.imagenSelector.setOnClickListener {
-            dispatchTakePictureIntent()
-            Toast.makeText(activity, "", Toast.LENGTH_SHORT).show()
+            SeleccionImagenGalley()
+            Toast.makeText(activity, "Seleccionar Imagen", Toast.LENGTH_SHORT).show()
         }
         return binding.root
     }
 
-    private val takePicture = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val imageBitmap = result.data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
-        }
+    private fun SeleccionImagenGalley(){
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            takePicture.launch(takePictureIntent)
-        } catch (e: ActivityNotFoundException) {
-            // Handle exception
-        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == PICK_IMAGE_REQUEST && resultCode== Activity.RESULT_OK && data != null) {
+        val selectedImageUri = data.data
+        val selectedImageBitmap = BitmapFactory.decodeStream(
+            requireActivity().contentResolver.openInputStream(selectedImageUri!!)
+        )
+        imageView.setImageBitmap(selectedImageBitmap)
     }
+
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
