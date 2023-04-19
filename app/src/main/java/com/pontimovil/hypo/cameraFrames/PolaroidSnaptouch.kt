@@ -2,7 +2,9 @@ package com.pontimovil.hypo.cameraFrames
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.pontimovil.hypo.R
 import com.pontimovil.hypo.databinding.FragmentPolaroidSnaptouchBinding
 
@@ -31,7 +35,8 @@ class polaroidSnaptouch : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentPolaroidSnaptouchBinding
-    private val REQUEST_IMAGE_CAPTURE = 1
+    private val IMAGE_CAPTURE_CODE = 1001
+    private val PERMISSION_CODE = 1000
     private lateinit var imageView: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +53,22 @@ class polaroidSnaptouch : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentPolaroidSnaptouchBinding.inflate(layoutInflater)
-
         binding.shutter.setOnClickListener {
-            dispatchTakePictureIntent()
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                // request permission
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA),
+                    PERMISSION_CODE
+                )
+            } else {
+                // permission already granted
+                openCamera()
+            }
             Toast.makeText(activity, "Foto!", Toast.LENGTH_SHORT).show()
         }
 
@@ -65,21 +83,47 @@ class polaroidSnaptouch : Fragment() {
         return binding.root
     }
 
-    private val takePicture = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val imageBitmap = result.data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
+    private fun openCamera() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        val imageUri = requireActivity().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            values
+        )
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startActivityForResult(intent, IMAGE_CAPTURE_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission granted
+                openCamera()
+            } else {
+                // permission denied
+                Toast.makeText(
+                    requireContext(),
+                    "Camera permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            takePicture.launch(takePictureIntent)
-        } catch (e: ActivityNotFoundException) {
-            // Handle exception
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == IMAGE_CAPTURE_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUri = data?.data
+            val bitmap = MediaStore.Images.Media.getBitmap(
+                requireActivity().contentResolver,
+                imageUri
+            )
+            imageView.setImageBitmap(bitmap)
         }
     }
 
