@@ -165,6 +165,11 @@ class polaroidSnaptouch : Fragment() {
         cameraExecutor.shutdown()
     }
 
+    override fun onPause() {
+        super.onPause()
+        cameraExecutor.shutdown()
+    }
+
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         Log.d(TAG, "takePhoto")
