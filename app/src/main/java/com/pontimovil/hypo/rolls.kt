@@ -1,11 +1,18 @@
 package com.pontimovil.hypo
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.pontimovil.hypo.databinding.FragmentRollsBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,6 +30,9 @@ class rolls : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentRollsBinding
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var imageView: ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +43,37 @@ class rolls : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_rolls, container, false)
         binding = FragmentRollsBinding.inflate(layoutInflater)
-
         binding.imagenSelector.setOnClickListener {
+            dispatchTakePictureIntent()
             Toast.makeText(activity, "", Toast.LENGTH_SHORT).show()
         }
         return binding.root
     }
 
+    private val takePicture = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageBitmap = result.data?.extras?.get("data") as Bitmap
+            imageView.setImageBitmap(imageBitmap)
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            takePicture.launch(takePictureIntent)
+        } catch (e: ActivityNotFoundException) {
+            // Handle exception
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
