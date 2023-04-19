@@ -57,4 +57,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    // OSM Bonus Pack
+    implementation 'com.github.MKergall:osmbonuspack:6.8.0'
 }

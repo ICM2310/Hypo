@@ -2,11 +2,15 @@ package com.pontimovil.hypo.googlemaps
 
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.os.Looper
+import android.os.StrictMode
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,21 +31,38 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.SettingsClient
 
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.tasks.Task
 import com.pontimovil.hypo.R
+import com.pontimovil.hypo.modelo.Rollo
+import org.osmdroid.bonuspack.routing.OSRMRoadManager
+import org.osmdroid.util.GeoPoint
 
 class MapsFragment : Fragment() {
 
-    val RADIUS_OF_EARTH_KM = 6400
+    //Location Managment
+    private var FirstAnimationLoc = false
     private lateinit var locationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private lateinit var UserLoc: Location
+
+    private lateinit var roadManager: OSRMRoadManager
+    private lateinit var polyline: Polyline
+    private lateinit var polylineJSON: Polyline
+
+    private lateinit var UserLocMarker: Marker
+    private val RollMarkers = mutableListOf<Marker>()
+
 
     //location permission
     private val locationPermission = registerForActivityResult(
@@ -69,15 +90,7 @@ class MapsFragment : Fragment() {
             })
 
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),R.raw.defaultstylemaps))
         if(!::UserLoc.isInitialized){
             val sydney = LatLng(-34.0, 151.0)
@@ -86,12 +99,24 @@ class MapsFragment : Fragment() {
         }
         else{
             val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
-            googleMap.addMarker(MarkerOptions().position(userMarker).title("Marker in Sydney"))
+            UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Marker in Sydney"))!!
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(userMarker))
         }
         googleMap.setPadding(0,0,0,150)
         googleMap.uiSettings.setAllGesturesEnabled(true)
-        googleMap.uiSettings.isZoomControlsEnabled = true
+        if(!FirstAnimationLoc){
+            googleMap.uiSettings.isZoomControlsEnabled = true
+            FirstAnimationLoc = true
+        }
+
+        val roll = Rollo.createMockRoll();
+        //Pintar ruta
+        CreateRollMarkers(roll,googleMap)
+        val polylineOptions = PolylineOptions().apply {
+            addAll(CreateRouteOSM(roll))
+            width(5F)
+            color(Color.BLUE)
+        }
     }
 
     override fun onCreateView(
@@ -110,6 +135,17 @@ class MapsFragment : Fragment() {
         locationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         locationRequest = createLocationRequest()
         locationCallback = setupLocationCallback()
+
+        //Inicializar gestor OSRM
+        roadManager = OSRMRoadManager(requireContext(), "ANDROID")
+        roadManager.addRequestOption("geometries=polyline")
+        roadManager.addRequestOption("overview=full")
+        roadManager.addRequestOption("annotations=true")
+        roadManager.addRequestOption("steps=true")
+        roadManager.addRequestOption("alternatives=true")
+        //
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
     }
 
     private fun locationSettings() {
@@ -182,6 +218,46 @@ class MapsFragment : Fragment() {
     }
     private fun UpdateUserLoc(location : Location){
         this.UserLoc = location
+    }
+
+    private fun CreateRouteOSM(r : Rollo): List<LatLng> {
+        val fotos = r.fotos
+        val RoutePoints = ArrayList<GeoPoint>()
+        for(p in fotos){
+            RoutePoints.add(GeoPoint(p.location.latitude, p.location.longitude))
+        }
+        val road = roadManager.getRoad(RoutePoints)
+        val latLngList = road.mRouteHigh.map { LatLng(it.latitude, it.longitude) }
+        return latLngList
+    }
+
+    private fun CreateRollMarkers(r: Rollo, googleMap: GoogleMap){
+        val fotos = r.fotos
+        var cont = 0
+        for(p in fotos){
+            if(cont == 0){
+                val bitmap = BitmapFactory.decodeResource(resources,R.drawable.roll_blue)
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false)
+                val CustomMarker = BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+                googleMap.addMarker(MarkerOptions().position(p.location).icon(CustomMarker))?.let { RollMarkers.add(it) }
+            }
+            if(cont == 1 ){
+                val bitmap = BitmapFactory.decodeResource(resources,R.drawable.roll_mango)
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false)
+                val CustomMarker = BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+                googleMap.addMarker(MarkerOptions().position(p.location).icon(CustomMarker))?.let { RollMarkers.add(it) }
+            }
+            if(cont == 2){
+                val bitmap = BitmapFactory.decodeResource(resources,R.drawable.roll_pink)
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false)
+                val CustomMarker = BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+                googleMap.addMarker(MarkerOptions().position(p.location).icon(CustomMarker))?.let { RollMarkers.add(it) }
+            }
+            if(cont == 3){
+                cont = 0
+            }
+            cont++
+        }
     }
 
 }
