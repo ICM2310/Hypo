@@ -1,10 +1,15 @@
 package com.pontimovil.hypo.googlemaps
 
+import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import androidx.fragment.app.Fragment
 
@@ -49,6 +54,8 @@ import org.osmdroid.util.GeoPoint
 
 class MapsFragment : Fragment() {
 
+    private lateinit var mMap: GoogleMap;
+
     //Location Managment
     private var FirstAnimationLoc = false
     private lateinit var locationClient: FusedLocationProviderClient
@@ -58,6 +65,11 @@ class MapsFragment : Fragment() {
 
     private lateinit var roadManager: OSRMRoadManager
     private lateinit var polyline: Polyline
+
+    //Sensor de luminosidad
+    private lateinit var sensorManager: SensorManager
+    private lateinit var lightSensor: Sensor
+    private lateinit var lightSensorListener: SensorEventListener
 
     private lateinit var UserLocMarker: Marker
     private val RollMarkers = mutableListOf<Marker>()
@@ -89,14 +101,25 @@ class MapsFragment : Fragment() {
             })
 
     private val callback = OnMapReadyCallback { googleMap ->
-
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),R.raw.defaultstylemaps))
+        mMap = googleMap
+        /*mMap.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                requireContext(), R.raw.defaultstylemaps
+            ))*/
         if(!::UserLoc.isInitialized){
             val sydney = LatLng(-34.0, 151.0)
             googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
         else{
+            if(!::UserLocMarker.isInitialized){
+                val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
+                UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
+            }
+            else{
+                val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
+                UserLocMarker.position = userMarker
+            }
             val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
             UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
             if(!FirstAnimationLoc){
@@ -155,6 +178,16 @@ class MapsFragment : Fragment() {
         //
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+
+        //Inicializar sensor de luminosidad
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        lightSensorListener = setupSensorListener()
+        sensorManager.registerListener(
+            lightSensorListener,
+            lightSensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
     }
 
     private fun locationSettings() {
@@ -270,6 +303,33 @@ class MapsFragment : Fragment() {
                 cont = 0
             }
             cont++
+
+        }
+
+    }
+    private fun setupSensorListener(): SensorEventListener {
+        return object : SensorEventListener {
+            override fun onSensorChanged(p0: SensorEvent?) {
+                if (p0 != null) {
+                    if (p0.values[0] > 1000) {
+                        /*mMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                requireContext(), R.raw.defaultstylemaps
+                            )
+                        )*/
+                    } else {
+                        //mMap.setMapStyle(
+                            //MapStyleOptions.loadRawResourceStyle(
+                                //requireContext(),
+                               // R.raw.nightstyle
+                            //)
+                        //)
+                    }
+                }
+            }
+            override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+                //Ignorar
+            }
         }
     }
 
