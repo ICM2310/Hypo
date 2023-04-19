@@ -33,7 +33,6 @@
     import androidx.recyclerview.widget.GridLayoutManager
     import androidx.recyclerview.widget.RecyclerView
     import com.pontimovil.hypo.databinding.FragmentGalleriaBinding
-    import java.lang.Math.sqrt
     import kotlin.math.sqrt
 
 
