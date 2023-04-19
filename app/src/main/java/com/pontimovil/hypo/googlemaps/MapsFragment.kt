@@ -102,10 +102,10 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        /*mMap.setMapStyle(
+        mMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 requireContext(), R.raw.defaultstylemaps
-            ))*/
+            ))
         if(!::UserLoc.isInitialized){
             val sydney = LatLng(-34.0, 151.0)
             googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
@@ -120,8 +120,6 @@ class MapsFragment : Fragment() {
                 val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
                 UserLocMarker.position = userMarker
             }
-            val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
-            UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
             if(!FirstAnimationLoc){
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(UserLocMarker.position, 15F), 1000, null)
                 FirstAnimationLoc = true
@@ -265,6 +263,7 @@ class MapsFragment : Fragment() {
     private fun CreateRouteOSM(r : Rollo): List<LatLng> {
         val fotos = r.fotos
         val RoutePoints = ArrayList<GeoPoint>()
+        RoutePoints.add(GeoPoint(UserLoc.latitude,UserLoc.longitude))
         for(p in fotos){
             RoutePoints.add(GeoPoint(p.location.latitude, p.location.longitude))
         }
