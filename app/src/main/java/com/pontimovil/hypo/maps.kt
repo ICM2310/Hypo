@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.Orientation
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.pontimovil.hypo.databinding.FragmentMapsBinding
+import com.pontimovil.hypo.googlemaps.MapsFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [maps.newInstance] factory method to
  * create an instance of this fragment.
  */
-class maps : Fragment() {
+class maps : Fragment(){
     private lateinit var binding: FragmentMapsBinding
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -32,8 +36,7 @@ class maps : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
-    override fun onCreateView(
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -54,11 +57,14 @@ class maps : Fragment() {
         val topBarFragment = topBar().apply {
             arguments = bundle
         }
+            val MapsFrag = MapsFragment().apply {
+                arguments = bundle
+            }
         childFragmentManager.beginTransaction().apply {
             add(topBar.id, topBarFragment, "topBar")
+            add(MapsFrag.id,MapsFrag,"GoogleMaps")
             commit()
         }
-
         return binding.root
     }
 
