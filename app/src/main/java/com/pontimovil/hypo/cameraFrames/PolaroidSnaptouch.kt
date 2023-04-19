@@ -1,11 +1,18 @@
 package com.pontimovil.hypo.cameraFrames
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.pontimovil.hypo.R
 import com.pontimovil.hypo.databinding.FragmentPolaroidSnaptouchBinding
 
@@ -24,6 +31,8 @@ class polaroidSnaptouch : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentPolaroidSnaptouchBinding
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var imageView: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -41,6 +50,7 @@ class polaroidSnaptouch : Fragment() {
         binding = FragmentPolaroidSnaptouchBinding.inflate(layoutInflater)
 
         binding.shutter.setOnClickListener {
+            dispatchTakePictureIntent()
             Toast.makeText(activity, "Foto!", Toast.LENGTH_SHORT).show()
         }
 
@@ -53,6 +63,24 @@ class polaroidSnaptouch : Fragment() {
         }
 
         return binding.root
+    }
+
+    private val takePicture = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageBitmap = result.data?.extras?.get("data") as Bitmap
+            imageView.setImageBitmap(imageBitmap)
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            takePicture.launch(takePictureIntent)
+        } catch (e: ActivityNotFoundException) {
+            // Handle exception
+        }
     }
 
     companion object {
