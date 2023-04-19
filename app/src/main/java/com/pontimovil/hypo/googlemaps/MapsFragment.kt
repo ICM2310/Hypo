@@ -58,7 +58,6 @@ class MapsFragment : Fragment() {
 
     private lateinit var roadManager: OSRMRoadManager
     private lateinit var polyline: Polyline
-    private lateinit var polylineJSON: Polyline
 
     private lateinit var UserLocMarker: Marker
     private val RollMarkers = mutableListOf<Marker>()
@@ -99,25 +98,35 @@ class MapsFragment : Fragment() {
         }
         else{
             val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
-            UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Marker in Sydney"))!!
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(userMarker))
+            UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
+            if(!FirstAnimationLoc){
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(UserLocMarker.position, 15F), 1000, null)
+                FirstAnimationLoc = true
+            }
+
         }
         googleMap.setPadding(0,0,0,150)
         googleMap.uiSettings.setAllGesturesEnabled(true)
-        if(!FirstAnimationLoc){
-            googleMap.uiSettings.isZoomControlsEnabled = true
-            FirstAnimationLoc = true
-        }
+        googleMap.uiSettings.isZoomControlsEnabled = true
 
         val roll = Rollo.createMockRoll();
         //Pintar ruta
         CreateRollMarkers(roll,googleMap)
+        Log.i("Ruta", "Se creo ruta")
         val polylineOptions = PolylineOptions().apply {
             addAll(CreateRouteOSM(roll))
             width(5F)
             color(Color.BLUE)
         }
+        Log.i("Ruta", "Se pinto la ruta")
+        if (!::polyline.isInitialized) {
+            polyline = googleMap.addPolyline(polylineOptions)
+        } else {
+            polyline.remove()
+            polyline = googleMap.addPolyline(polylineOptions)
+        }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -254,6 +263,10 @@ class MapsFragment : Fragment() {
                 googleMap.addMarker(MarkerOptions().position(p.location).icon(CustomMarker))?.let { RollMarkers.add(it) }
             }
             if(cont == 3){
+                val bitmap = BitmapFactory.decodeResource(resources,R.drawable.roll_orange)
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false)
+                val CustomMarker = BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+                googleMap.addMarker(MarkerOptions().position(p.location).icon(CustomMarker))?.let { RollMarkers.add(it) }
                 cont = 0
             }
             cont++
