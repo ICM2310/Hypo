@@ -49,7 +49,7 @@ class maps : Fragment() {
         val topBar = binding.topBar
         val fragmentName = "Mapa" // replace with the fragment name you want to use
         val bundle = Bundle().apply {
-            putString("fragmentName", fragmentName)
+            putString("fragmentName", fragmentName) //
         }
         val topBarFragment = topBar().apply {
             arguments = bundle

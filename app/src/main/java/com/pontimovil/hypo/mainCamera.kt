@@ -32,6 +32,8 @@ class mainCamera : Fragment(), polaroidSnaptouch.OnPictureTakenListener { // mai
             param1 = it.getString(ARG_PARAM1) // Se asignan los argumentos a los parámetros
             param2 = it.getString(ARG_PARAM2) // Se asignan los argumentos a los parámetros
         }
+        // Esconder la action bar
+        (activity as MainActivity).supportActionBar?.hide() // Se esconde la action bar
     }
 
     override fun onPictureTaken() {

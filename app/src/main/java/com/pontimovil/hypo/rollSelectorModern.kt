@@ -27,7 +27,6 @@ class rollSelectorModern : Fragment() {
     private lateinit var binding: FragmentRollSelectorModernBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = FragmentRollSelectorModernBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -48,13 +47,20 @@ class rollSelectorModern : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("RollSelectorModern", "View created")
+        binding = FragmentRollSelectorModernBinding.bind(view)
+
         binding.photoWidget.setOnClickListener {
-            Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
+            // Crear una instancia del fragmento de la galería
+            val galleryFragment = galleria.newInstance()
+            // Obtener el administrador de fragmentos
+            val fragmentManager = requireActivity().supportFragmentManager
+            // Abrir el fragmento de la galería en la actividad actual
+            fragmentManager.beginTransaction()
+                .replace(R.id.mainCameraFragmentContainer, galleryFragment)
+                .addToBackStack(null)
+                .commit()
         }
-        binding.imageView2.setOnClickListener {
-            Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     companion object {
