@@ -1,11 +1,19 @@
 package com.pontimovil.hypo
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.pontimovil.hypo.databinding.FragmentRollsBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,6 +31,9 @@ class rolls : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentRollsBinding
+    private val PICK_IMAGE_REQUEST = 1
+    private lateinit var imageView: ImageView
+    private val PERMISSION_CODE = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,17 +44,38 @@ class rolls : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_rolls, container, false)
         binding = FragmentRollsBinding.inflate(layoutInflater)
-
+        imageView = view.findViewById(R.id.imageView5)
         binding.imagenSelector.setOnClickListener {
-            Toast.makeText(activity, "", Toast.LENGTH_SHORT).show()
+            SeleccionImagenGalley()
+            Toast.makeText(activity, "Seleccionar Imagen", Toast.LENGTH_SHORT).show()
         }
         return binding.root
     }
+
+    private fun SeleccionImagenGalley(){
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == PICK_IMAGE_REQUEST && resultCode== Activity.RESULT_OK && data != null) {
+        val selectedImageUri = data.data
+        val selectedImageBitmap = BitmapFactory.decodeStream(
+            requireActivity().contentResolver.openInputStream(selectedImageUri!!)
+        )
+        imageView.setImageBitmap(selectedImageBitmap)
+    }
+
+    }
+
 
     companion object {
         /**
