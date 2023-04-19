@@ -57,12 +57,13 @@ class maps : Fragment(){
         val topBarFragment = topBar().apply {
             arguments = bundle
         }
+            val MapsFragConteiner = binding.MapsFrag
             val MapsFrag = MapsFragment().apply {
                 arguments = bundle
             }
         childFragmentManager.beginTransaction().apply {
             add(topBar.id, topBarFragment, "topBar")
-            add(MapsFrag.id,MapsFrag,"GoogleMaps")
+            add(MapsFragConteiner.id,MapsFrag,"GoogleMaps")
             commit()
         }
         return binding.root
