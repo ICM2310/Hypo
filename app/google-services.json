@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "38684818157",
+    "project_id": "hypo-c8ccf",
+    "storage_bucket": "hypo-c8ccf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38684818157:android:71212efbdfc13d2bf5eae4",
+        "android_client_info": {
+          "package_name": "com.pontimovil.hypo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38684818157-nglg05utjjmbigsdfa53refdr1l2rdgt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgkqFMEcwKNlttx2cgASbIcL7xC3Dzgzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "38684818157-nglg05utjjmbigsdfa53refdr1l2rdgt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,6 +23,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/photoWidget"
         android:layout_width="225dp"
         android:layout_height="81dp"
         android:layout_marginTop="16dp"
@@ -30,6 +31,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_corners"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.516">
@@ -77,54 +79,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="-35dp"
-                android:layout_weight="1"
-                android:scaleType="centerInside"
-                android:src="@drawable/snaptouch_frame"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="67dp"
-                android:layout_marginBottom="-35dp"
-                android:layout_weight="1"
-                android:scaleType="centerInside"
-                android:src="@drawable/snaptouch_frame"
+            <LinearLayout
+                android:id="@+id/photoLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-50dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
 
-            <ImageView
-                android:id="@+id/imageView13"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="67dp"
-                android:layout_marginBottom="-35dp"
-                android:layout_weight="1"
-                android:scaleType="centerInside"
-                android:src="@drawable/snaptouch_frame"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/snaptouch_frame" />
 
-            <ImageView
-                android:id="@+id/imageView14"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="-35dp"
-                android:layout_weight="1"
-                android:scaleType="centerInside"
-                android:src="@drawable/snaptouch_frame"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

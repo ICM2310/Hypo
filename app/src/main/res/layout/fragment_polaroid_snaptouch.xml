@@ -11,8 +11,7 @@
     <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="580dp"
-        android:layout_marginTop="-15dp"
+        android:layout_height="600dp"
         android:contentDescription="Es la gradiente de fondo de la camara snaptouch polaroid"
         android:scaleType="fitXY"
         android:src="@drawable/snaptouch_polaroidsnaptouchbackground"
@@ -42,19 +41,6 @@
         android:contentDescription="Es el logo de la camara snaptouch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/lens"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:contentDescription="Es la lente de la camara snaptouch"
-        android:src="@drawable/snaptouch_lens_png"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="@+id/background"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/background"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        app:layout_constraintVertical_bias="0.48" />
 
     <ImageView
         android:id="@+id/hypoLogo"
@@ -105,6 +91,43 @@
         android:src="@drawable/snaptouch_shutter"
         app:layout_constraintBottom_toBottomOf="@+id/background"
         app:layout_constraintEnd_toEndOf="@+id/background" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintBottom_toBottomOf="@+id/hypoLogo"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.462">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
+            android:layout_width="131dp"
+            android:layout_height="129dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.504" />
+
+        <ImageView
+            android:id="@+id/lens"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:contentDescription="Es la lente de la camara snaptouch"
+            android:src="@drawable/snaptouch_lens_png"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

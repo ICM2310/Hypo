@@ -18,7 +18,11 @@ private const val ARG_PARAM2 = "param2"
  * Fragmento principal de la cámara, contiene los fragments de la cámara y el selector de rollos
  *
  */
-class mainCamera : Fragment() { // mainCamera es el fragmento principal de la cámara, contiene los fragments de la cámara y el selector de rollos, se encarga de la comunicación entre ellos
+class mainCamera : Fragment(), polaroidSnaptouch.OnPictureTakenListener { // mainCamera es el fragmento principal de la cámara, contiene los fragments de la cámara y el selector de rollos, se encarga de la comunicación entre ellos
+
+    // Array de los Rollos de la cámara
+    var rolls: Array<Roll> = arrayOf() // Array de los Rollos de la cámara
+    val selectedRoll: Int = 0 // Rollo seleccionado
     private var param1: String? = null // Parámetros de la cámara
     private var param2: String? = null // Parámetros de la cámara
     private lateinit var binding: FragmentMainCameraBinding // Binding del fragmento, contiene los layouts de la cámara y el selector de rollos
@@ -28,8 +32,14 @@ class mainCamera : Fragment() { // mainCamera es el fragmento principal de la c�
             param1 = it.getString(ARG_PARAM1) // Se asignan los argumentos a los parámetros
             param2 = it.getString(ARG_PARAM2) // Se asignan los argumentos a los parámetros
         }
+        // Esconder la action bar
+        (activity as MainActivity).supportActionBar?.hide() // Se esconde la action bar
+    }
 
-
+    override fun onPictureTaken() {
+        // Update the modern rolls fragment
+        val modernRollsFragment = childFragmentManager.findFragmentByTag("rollerSelector") as rollSelectorModern
+        modernRollsFragment.updateRoll(rolls[selectedRoll])
     }
 
     /**
@@ -46,9 +56,17 @@ class mainCamera : Fragment() { // mainCamera es el fragmento principal de la c�
         childFragmentManager.beginTransaction().apply { // Se crea una transacción de fragmentos, se usa childFragmentManager porque el fragmento principal de la cámara es un fragmento dentro de otro fragmento
 
             add(cameraContainLayout.id, polaroidSnaptouch.newInstance("", ""), "polaroidSnaptouch") // Se añade el fragmento de la cámara al FrameLayout de la cámara
+
             add(rollerContainLayout.id, rollSelectorModern.newInstance("", ""), "rollerSelector") // Se añade el fragmento del selector de rollos al FrameLayout del selector de rollos
             commit() // Se ejecuta la transacción, es decir, se añaden los fragments a los FrameLayouts
         }
+
+        // Si esta vacío el array de rollos, se crea un nuevo rollo
+        if (rolls.isEmpty()) {
+            rolls = arrayOf(Roll())
+        }
+
+
 
         return binding.root // Se devuelve la vista del fragmento
     }

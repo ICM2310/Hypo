@@ -1,10 +1,14 @@
 package com.pontimovil.hypo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
+import com.pontimovil.hypo.databinding.FragmentRollSelectorModernBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +24,7 @@ class rollSelectorModern : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding: FragmentRollSelectorModernBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,14 +32,35 @@ class rollSelectorModern : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("RollSelectorModern", "Creating view")
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_roll_selector_modern, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentRollSelectorModernBinding.bind(view)
+
+        binding.photoWidget.setOnClickListener {
+            // Crear una instancia del fragmento de la galería
+            val galleryFragment = galleria.newInstance()
+            // Obtener el administrador de fragmentos
+            val fragmentManager = requireActivity().supportFragmentManager
+            // Abrir el fragmento de la galería en la actividad actual
+            fragmentManager.beginTransaction()
+                .replace(R.id.mainCameraFragmentContainer, galleryFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     companion object {
@@ -55,5 +81,25 @@ class rollSelectorModern : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+
+
+    }
+
+    // function to udpdate the linear layout with the new roll
+    fun updateRoll(roll: Roll) {
+        Log.d("RollSelectorModern", "Updating roll")
+        val images = roll.images
+        val layout = binding.photoLayout
+        for (image in images) {
+            val imageView = ImageView(context)
+            imageView.setImageURI(image)
+            layout.addView(imageView)
+        }
     }
 }
+
+private fun ImageView.setImageURI(image: String) {
+    this.setImageURI(image)
+}
+
+
