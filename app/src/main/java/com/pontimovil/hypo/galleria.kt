@@ -16,6 +16,7 @@
     import android.hardware.SensorEvent
     import android.hardware.SensorEventListener
     import android.hardware.SensorManager
+    import android.os.Build
     import android.os.Bundle
     import android.os.Handler
     import android.os.Looper
@@ -44,7 +45,12 @@
         private val SHAKE_THRESHOLD_GRAVITY = 50.0f
         private var _binding: FragmentGalleriaBinding? = null
 
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        private val REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
         // Request code for READ_EXTERNAL_STORAGE. It can be any number > 0.
         private val REQUEST_CODE_PERMISSIONS = 10
 
@@ -70,8 +76,22 @@
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            var permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
-            var granted = checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+            } else {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            }
+            val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
+            } else {
+                checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
             Toast.makeText(requireContext(), "Permission: $permission", Toast.LENGTH_SHORT).show()
             if (granted == 0) {
                 // run on ui thread

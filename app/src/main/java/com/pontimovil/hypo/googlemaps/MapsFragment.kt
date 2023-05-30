@@ -102,10 +102,10 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        mMap.setMapStyle(
+        /*mMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 requireContext(), R.raw.defaultstylemaps
-            ))
+            ))*/
         if(!::UserLoc.isInitialized){
             val sydney = LatLng(-34.0, 151.0)
             googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
