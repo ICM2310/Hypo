@@ -69,4 +69,9 @@ dependencies {
     // OSM Bonus Pack
     implementation 'com.github.MKergall:osmbonuspack:6.8.0'
 
+
+    implementation "androidx.biometric:biometric-ktx:1.2.0-alpha05"
+    implementation 'androidx.biometric:biometric:1.1.0'
+
+
 }
