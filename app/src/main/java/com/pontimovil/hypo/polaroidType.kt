@@ -1,5 +1,6 @@
 package com.pontimovil.hypo
 
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -7,20 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.pontimovil.hypo.databinding.ActivityPolaroidTypeBinding
 
-class polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType.ViewHolder>() {
-
+class polaroidType(val imagePaths: MutableList<String>, var images: List<Bitmap>) : RecyclerView.Adapter<polaroidType.ViewHolder>() {
 
     private lateinit var binding: ActivityPolaroidTypeBinding
     private lateinit var imagen: ImageView
     val imageViews = mutableListOf<ImageView>()
     var isStyleApplied = false
 
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): polaroidType.ViewHolder {
         var layoutInflater = LayoutInflater.from(parent.context)
@@ -30,8 +29,23 @@ class polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType
     }
 
     override fun onBindViewHolder(holder: polaroidType.ViewHolder, position: Int) {
+
         binding.imagen.setImageBitmap(images[position])
         val imageView = holder.itemView.findViewById<ImageView>(binding.imagen.id)
+
+        imageView.setOnClickListener {
+            var context = imageView.context
+            while (context is ContextWrapper) {
+                if (context is FragmentActivity) {
+                    val dialog = ImageOverlayDialogFragment.newInstance(images[position])
+                    dialog.show(context.supportFragmentManager, "ImageOverlay")
+                    return@setOnClickListener
+                } else {
+                    context = context.baseContext
+                }
+            }
+        }
+
 
         if (isStyleApplied) {
             val colorMatrix = ColorMatrix()
@@ -54,10 +68,10 @@ class polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType
             imageView.clearColorFilter()
         }
 
+
+
         imageViews.add(imageView)
-
     }
-
 
     override fun getItemCount(): Int {
         return images.size
@@ -67,7 +81,4 @@ class polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType
         isStyleApplied = !isStyleApplied
         notifyDataSetChanged()
     }
-
-
-
 }

@@ -66,6 +66,8 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+
     // OSM Bonus Pack
     implementation 'com.github.MKergall:osmbonuspack:6.8.0'
 

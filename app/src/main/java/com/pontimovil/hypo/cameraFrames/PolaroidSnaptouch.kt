@@ -294,3 +294,4 @@ class LumaListener {
         //Log.d("LumaListener", "Average luminosity: $luma")
     }
 }
+
