@@ -61,7 +61,7 @@ class MapsFragment : Fragment() {
     //FireStore
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    val markerList: MutableList<Marker> = mutableListOf()
+    private var markerList: MutableList<Marker> = mutableListOf()
 
     //Location Managment
     private var FirstAnimationLoc = false
@@ -109,33 +109,17 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        /*mMap.setMapStyle(
+        mMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(
                 requireContext(), R.raw.defaultstylemaps
-            ))*/
+            ))
         if(!::UserLoc.isInitialized){
             val sydney = LatLng(-34.0, 151.0)
             googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
         else{
-            val listaUsuarios = getRegistersFromUsers()
-            for((index,usuario) in listaUsuarios.withIndex()){
-                if(markerList.getOrNull(index) == null){
-                    val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
-                    googleMap.addMarker(MarkerOptions().position(Ubi).title(usuario.email))
-                        ?.let { markerList.add(index, it) }
-                }
-                else{
-                    if(markerList[index].position.latitude != usuario.Lat.toDouble() || markerList[index].position.longitude != usuario.Long.toDouble()){
-                        val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
-                        val marker = googleMap.addMarker(MarkerOptions().position(Ubi).title(usuario.email))
-                        if (marker != null) {
-                            markerList[index] = marker
-                        }
-                    }
-                }
-            }
+            getRegistersFromUsers(googleMap)
             if(!::UserLocMarker.isInitialized){
                 val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
                 UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
@@ -421,8 +405,7 @@ class MapsFragment : Fragment() {
             }
     }
 
-    private fun getRegistersFromUsers(): MutableList<Usuario> {
-        val collectionName = "yourCollectionName"
+    private fun getRegistersFromUsers(googleMap: GoogleMap){
         val objectList = mutableListOf<Usuario>()
         // Get a reference to the collection
         val collectionRef = db.collection("users")
@@ -431,20 +414,32 @@ class MapsFragment : Fragment() {
         collectionRef.get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
-                    val email = document.get("email").toString()
-                    val lat = document.get("Lat").toString()
-                    val long = document.get("Long").toString()
+                    val email = document.getString("email").toString()
+                    val lat = document.getString("Lat").toString()
+                    val long = document.getString("Long").toString()
                     if(email != auth.currentUser?.email){
                         val U1 = Usuario(email,lat,long)
+                        Log.d("UsuarioD",U1.email)
                         objectList.add(U1)
+                    }
+                }
+                for((index,usuario) in objectList.withIndex()){
+                    if(markerList.getOrNull(index) == null){
+                        val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
+                        googleMap.addMarker(MarkerOptions().position(Ubi).title(usuario.email))
+                            ?.let { markerList.add(index, it) }
+                    }
+                    else{
+                        if(markerList[index].position.latitude != usuario.Lat.toDouble() || markerList[index].position.longitude != usuario.Long.toDouble()){
+                            val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
+                            markerList[index].position = Ubi
+                        }
                     }
                 }
             }
             .addOnFailureListener { e ->
                 println("Error getting documents: $e")
             }
-
-        return objectList
     }
 
 }
