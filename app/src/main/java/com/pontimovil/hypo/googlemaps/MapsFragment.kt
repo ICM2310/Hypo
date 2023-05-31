@@ -11,8 +11,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.os.Looper
 import android.os.StrictMode
@@ -25,6 +23,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -34,7 +33,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.SettingsClient
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -47,14 +45,23 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.pontimovil.hypo.R
 import com.pontimovil.hypo.modelo.Rollo
+import com.pontimovil.hypo.modelo.Usuario
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.util.GeoPoint
+
 
 class MapsFragment : Fragment() {
 
     private lateinit var mMap: GoogleMap;
+
+    //FireStore
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val markerList: MutableList<Marker> = mutableListOf()
 
     //Location Managment
     private var FirstAnimationLoc = false
@@ -112,6 +119,23 @@ class MapsFragment : Fragment() {
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         }
         else{
+            val listaUsuarios = getRegistersFromUsers()
+            for((index,usuario) in listaUsuarios.withIndex()){
+                if(markerList.getOrNull(index) == null){
+                    val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
+                    googleMap.addMarker(MarkerOptions().position(Ubi).title(usuario.email))
+                        ?.let { markerList.add(index, it) }
+                }
+                else{
+                    if(markerList[index].position.latitude != usuario.Lat.toDouble() || markerList[index].position.longitude != usuario.Long.toDouble()){
+                        val Ubi = LatLng(usuario.Lat.toDouble(),usuario.Long.toDouble())
+                        val marker = googleMap.addMarker(MarkerOptions().position(Ubi).title(usuario.email))
+                        if (marker != null) {
+                            markerList[index] = marker
+                        }
+                    }
+                }
+            }
             if(!::UserLocMarker.isInitialized){
                 val userMarker = LatLng(UserLoc.latitude, UserLoc.longitude)
                 UserLocMarker = googleMap.addMarker(MarkerOptions().position(userMarker).title("Your Location"))!!
@@ -258,6 +282,7 @@ class MapsFragment : Fragment() {
     }
     private fun UpdateUserLoc(location : Location){
         this.UserLoc = location
+        CreateFirebaseUpdate(UserLoc)
     }
 
     private fun CreateRouteOSM(r : Rollo): List<LatLng> {
@@ -311,18 +336,18 @@ class MapsFragment : Fragment() {
             override fun onSensorChanged(p0: SensorEvent?) {
                 if (p0 != null) {
                     if (p0.values[0] > 1000) {
-                        /*mMap.setMapStyle(
+                        mMap.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
                                 requireContext(), R.raw.defaultstylemaps
                             )
-                        )*/
+                        )
                     } else {
-                        //mMap.setMapStyle(
-                            //MapStyleOptions.loadRawResourceStyle(
-                                //requireContext(),
-                               // R.raw.nightstyle
-                            //)
-                        //)
+                        mMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                requireContext(),
+                                R.raw.nightstyle
+                            )
+                        )
                     }
                 }
             }
@@ -330,6 +355,96 @@ class MapsFragment : Fragment() {
                 //Ignorar
             }
         }
+    }
+
+    private fun CreateFirebaseUpdate(UserLoc : Location){
+
+        // Specify the collection name
+        val collectionName = "users_loc"
+
+        // Specify the field to query (in this case, "name")
+        val fieldName = "email"
+
+        // Specify the value to search for (the name parameter)
+        val nameParam = auth.currentUser?.email.toString()
+
+        // Query the collection for documents with matching name
+        val query = db.collection("users")
+            .whereEqualTo(fieldName, nameParam)
+
+        // Execute the query
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // Retrieve the first document from the query results
+                    val documentSnapshot = querySnapshot.documents[0]
+                    val documentId = documentSnapshot.id
+
+                    // Modify the data
+                    val user: MutableMap<String, Any> = HashMap()
+                    user["email"] = auth.currentUser?.email.toString()
+                    user["Lat"] = UserLoc.latitude.toString()
+                    user["Long"] = UserLoc.longitude.toString()
+
+                    // Get a reference to the document by ID
+                    val docRef = db.collection("users").document(documentId)
+
+                    // Update the document with the modified data
+                    docRef.update(user as Map<String, Any>)
+                        .addOnSuccessListener {
+                            // Document successfully updated
+                            println("Document successfully updated")
+                        }
+                        .addOnFailureListener { e ->
+                            // Error updating document
+                            println("Error updating document: $e")
+                        }
+                } else {
+                    val user: MutableMap<String, Any> = HashMap()
+                    user["email"] = auth.currentUser?.email.toString()
+                    user["Lat"] = UserLoc.latitude.toString()
+                    user["Long"] = UserLoc.longitude.toString()
+
+                    db.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(
+                                "FireBase",
+                                "DocumentSnapshot added with ID: " + documentReference.id
+                            )
+                        }
+                        .addOnFailureListener { e -> Log.w("FireBase", "Error adding document", e) }
+                }
+            }
+            .addOnFailureListener { e ->
+                println("Error querying documents: $e")
+            }
+    }
+
+    private fun getRegistersFromUsers(): MutableList<Usuario> {
+        val collectionName = "yourCollectionName"
+        val objectList = mutableListOf<Usuario>()
+        // Get a reference to the collection
+        val collectionRef = db.collection("users")
+
+        // Fetch all documents in the collection
+        collectionRef.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val email = document.get("email").toString()
+                    val lat = document.get("Lat").toString()
+                    val long = document.get("Long").toString()
+                    if(email != auth.currentUser?.email){
+                        val U1 = Usuario(email,lat,long)
+                        objectList.add(U1)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                println("Error getting documents: $e")
+            }
+
+        return objectList
     }
 
 }
