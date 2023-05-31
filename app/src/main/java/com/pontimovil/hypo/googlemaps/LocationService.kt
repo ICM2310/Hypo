@@ -71,7 +71,7 @@ class LocationService : Service() {
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Location Service")
             .setContentText("Updating location in the background")
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.icon_background_display)
             .build()
 
         startForeground(1, notification)
