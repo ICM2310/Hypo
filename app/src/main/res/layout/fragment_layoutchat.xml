@@ -13,6 +13,12 @@
             android:textStyle="italic"
             android:layout_marginLeft="18dp"/>
 
+        <Button
+            android:id="@+id/btn_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat" />
+
         <View
             android:layout_marginTop="5dp"
             android:layout_below="@id/txt_name"

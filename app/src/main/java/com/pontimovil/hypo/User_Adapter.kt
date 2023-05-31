@@ -3,6 +3,7 @@ package com.pontimovil.hypo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pontimovil.hypo.modelo.Usuario
@@ -24,8 +25,31 @@ class UserAdapter(private val userList: ArrayList<Usuario>) : RecyclerView.Adapt
     }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val nameTextView: TextView = itemView.findViewById(R.id.txt_name)
+        private val chatButton: Button = itemView.findViewById(R.id.btn_chat)
+
         fun bind(user: Usuario) {
-            itemView.findViewById<TextView>(R.id.txt_name).text = user.email
+            nameTextView.text = user.email
+
+            chatButton.setOnClickListener {
+                // Handle chat button click event
+                val clickedUser = userList[adapterPosition]
+                // Open chat between the current user and the clicked user
+                openChatBetweenUsers(clickedUser)
+            }
         }
+    }
+
+    private fun openChatBetweenUsers(clickedUser: Usuario) {
+        // Implement your logic to open a chat between the current user and the clicked user
+        // You can use an Intent to navigate to a new activity or fragment for the chat screen
+        // Pass any necessary data to the chat screen, such as user IDs or other identifiers
+        // Example:
+        /*
+        val intent = Intent(context, ChatActivity::class.java)
+        intent.putExtra("currentUserId", getCurrentUserId())
+        intent.putExtra("clickedUserId", clickedUser.id)
+        startActivity(intent)
+        */
     }
 }
