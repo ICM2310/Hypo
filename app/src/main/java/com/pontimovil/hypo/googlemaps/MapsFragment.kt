@@ -1,6 +1,7 @@
 package com.pontimovil.hypo.googlemaps
 
 import android.content.Context
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -266,7 +267,10 @@ class MapsFragment : Fragment() {
     }
     private fun UpdateUserLoc(location : Location){
         this.UserLoc = location
-        CreateFirebaseUpdate(UserLoc)
+        //CreateFirebaseUpdate(UserLoc)
+        val serviceIntent = Intent(requireContext(), LocationService::class.java)
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
+
     }
 
     private fun CreateRouteOSM(r : Rollo): List<LatLng> {
