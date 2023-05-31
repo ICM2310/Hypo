@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.pontimovil.hypo.MainActivity
 import com.pontimovil.hypo.R
 import com.pontimovil.hypo.databinding.ActivityRegistroUsuarioBinding
@@ -14,7 +16,7 @@ class RegistroUsuarioActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRegistroUsuarioBinding
     private lateinit var auth: FirebaseAuth
-
+    val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroUsuarioBinding.inflate(layoutInflater)
