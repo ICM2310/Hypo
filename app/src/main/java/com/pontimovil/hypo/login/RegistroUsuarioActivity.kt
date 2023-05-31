@@ -11,12 +11,14 @@ import com.google.firebase.ktx.Firebase
 import com.pontimovil.hypo.MainActivity
 import com.pontimovil.hypo.R
 import com.pontimovil.hypo.databinding.ActivityRegistroUsuarioBinding
+import com.pontimovil.hypo.modelo.Usuario
 
 class RegistroUsuarioActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRegistroUsuarioBinding
     private lateinit var auth: FirebaseAuth
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroUsuarioBinding.inflate(layoutInflater)
@@ -36,7 +38,20 @@ class RegistroUsuarioActivity : AppCompatActivity() {
                 if(password == confirmarPassword){
                     auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{
                         if(it.isSuccessful){
-                            startActivity(Intent(baseContext, MainActivity::class.java))
+                            val userId = auth.currentUser?.uid
+                            val user = Usuario(email, "0", "0") // Create a User object with desired data
+                            if (userId != null) {
+                                db.collection("chatusuarios").document(userId)
+                                    .set(user)
+                                    .addOnSuccessListener {
+                                        startActivity(Intent(baseContext, MainActivity::class.java))
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Toast.makeText(this, "Failed to save user data: ${exception.message}", Toast.LENGTH_LONG).show()
+                                    }
+                            }else{
+                                Toast.makeText(this, "Failed to get user ID", Toast.LENGTH_SHORT).show()
+                            }
                         }else{
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_LONG).show()
                         }
