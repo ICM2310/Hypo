@@ -34,6 +34,8 @@ class polaroidType(val imagePaths: MutableList<String>, var images: MutableList<
         val imageView = holder.itemView.findViewById<ImageView>(binding.imagen.id)
 
         imageView.setImageBitmap(images[position])
+        /*
+
 
         imageView.setOnClickListener {
             var context = imageView.context
@@ -47,6 +49,8 @@ class polaroidType(val imagePaths: MutableList<String>, var images: MutableList<
                 }
             }
         }
+
+         */
 
         if (isStyleApplied) {
             val colorMatrix = ColorMatrix()

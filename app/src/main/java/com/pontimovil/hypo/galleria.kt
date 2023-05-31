@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.hardware.Sensor
@@ -151,7 +152,7 @@ class galleria : Fragment(), SensorEventListener {
         cursor?.use {
             while (cursor.moveToNext()) {
                 val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                if (imagePath.contains(targetDirectory)) {
+                if (imagePath.contains(targetDirectory) && imagePath.contains("_edited")) {
                     Log.d("TAG", "loadImages: $imagePath")
                     // Load bitmaps with a third of the original size
                     val options = BitmapFactory.Options()
@@ -164,7 +165,8 @@ class galleria : Fragment(), SensorEventListener {
                     // Check the shared preferences for the development level of each image
                     val developmentLevel = mPreferences?.getFloat(imagePath, 0f) ?: 0f
                     // Apply the color matrix with the development level
-                    val bitmap = convertToBlack(originalBitmap, developmentLevel)
+                    var bitmap = convertToBlack(originalBitmap, developmentLevel)
+                    //bitmap = rotateBitmap(bitmap, 90f)
                     images.add(bitmap)
                     imagePaths.add(imagePath)
                 }
@@ -175,8 +177,8 @@ class galleria : Fragment(), SensorEventListener {
         imageLayout?.layoutManager = GridLayoutManager(requireContext(), 3)
         imageLayout?.addItemDecoration(SpaceItemDecoration(10))
         imageLayout?.adapter = adapter
-
     }
+
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
@@ -275,7 +277,7 @@ class galleria : Fragment(), SensorEventListener {
             cleanImages.forEachIndexed { index, bitmap ->
                 val imagePath = getImagePathAtIndex(index)
                 val developmentLevel = mPreferences?.getFloat(imagePath, 0f) ?: 0f // Get the development level from shared preferences. The :? 0f is a null check
-                if (developmentLevel < 0.9f) {
+                if (developmentLevel < 0.85f) {
                     val newDevelopmentLevel = developmentLevel + 0.1f
                     // Update the development level in the shared preferences
                     mPreferences?.edit {
@@ -331,6 +333,12 @@ class galleria : Fragment(), SensorEventListener {
         paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
         canvas.drawBitmap(bitmap, 0f, 0f, paint)
         return outputBitmap
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
 }
