@@ -1,6 +1,7 @@
 package com.pontimovil.hypo
 
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,8 +14,10 @@ import androidx.fragment.app.replace
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.firebase.auth.FirebaseAuth
 
 import com.pontimovil.hypo.cameraFrames.polaroidSnaptouch
+import com.pontimovil.hypo.login.LoginUsuarioActivity
 
 // TODO: Crear fragmentos de decoraciones de camaras.
 
@@ -26,6 +29,7 @@ import com.pontimovil.hypo.cameraFrames.polaroidSnaptouch
 class MainActivity : AppCompatActivity() { // Main acitivity es la actividad principal de la app
     private lateinit var binding: ActivityMainBinding // Crear un binding para el layout activity_main. Esto permite acceder a los elementos del layout desde el código.
     private lateinit var navController: NavController // Crear un navController para el bottom navigation view. Esto permite navegar entre los diferentes fragmentos de la app.
+    private lateinit var auth: FirebaseAuth
 
     /**
      * Método onCreate de la actividad principal.
@@ -39,6 +43,11 @@ class MainActivity : AppCompatActivity() { // Main acitivity es la actividad pri
         window.statusBarColor = resources.getColor(R.color.black) // Establecer el color de la barra de estado
         navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment) // Establecer el navController
         setupWithNavController(binding.bottomNavigationView, navController) // Establecer el bottom navigation view con el navController
+
+        binding.botonLogout.setOnClickListener{
+            FirebaseAuth.getInstance().signOut();
+            startActivity(Intent(baseContext, LoginUsuarioActivity::class.java))
+        }
 
 
     }

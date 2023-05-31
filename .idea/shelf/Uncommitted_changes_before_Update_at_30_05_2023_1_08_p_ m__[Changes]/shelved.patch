@@ -1,0 +1,493 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-feature\r\n        android:name=\"android.hardware.camera\"\r\n        android:required=\"false\" />\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_BACKGROUND_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.READ_MEDIA_IMAGES\" />\r\n    <uses-permission android:name=\"android.permission.USE_BIOMETRIC\"/>\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.Hypo\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".polaroidType\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".login.RegistroUsuarioActivity\"\r\n            android:exported=\"false\" />\r\n        <!--\r\n             TODO: Before you run your application, you need a Google Maps API key.\r\n\r\n             To get one, follow the directions here:\r\n\r\n                https://developers.google.com/maps/documentation/android-sdk/get-api-key\r\n\r\n             Once you have your API key (it starts with \"AIza\"), define a new property in your\r\n             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the\r\n             \"YOUR_API_KEY\" string in this file with \"${MAPS_API_KEY}\".\r\n        -->\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"YOUR_API_KEY\" />\r\n\r\n        <activity\r\n            android:name=\".login.LoginUsuarioActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/src/main/AndroidManifest.xml	(date 1685470114041)
+@@ -15,7 +15,6 @@
+     <uses-permission android:name="android.permission.CAMERA" />
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+-    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+ 
+     <application
+         android:allowBackup="true"
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n    id 'org.jetbrains.kotlin.android'\r\n    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'\r\n    id 'com.google.gms.google-services'\r\n}\r\n\r\nandroid {\r\n    namespace 'com.pontimovil.hypo'\r\n    compileSdk 33\r\n\r\n    defaultConfig {\r\n        applicationId \"com.pontimovil.hypo\"\r\n        minSdk 24\r\n        targetSdk 33\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = '1.8'\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation \"androidx.fragment:fragment-ktx:1.5.5\"\r\n    implementation 'androidx.core:core-ktx:1.7.0'\r\n    implementation 'androidx.appcompat:appcompat:1.6.1'\r\n    implementation 'com.google.android.material:material:1.8.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\r\n    implementation 'com.google.android.gms:play-services-maps:18.0.2'\r\n    implementation 'androidx.annotation:annotation:1.3.0'\r\n    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'\r\n    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'\r\n    implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'\r\n    implementation 'com.google.android.gms:play-services-location:21.0.1'\r\n    testImplementation 'junit:junit:4.13.2'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\r\n    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'\r\n    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'\r\n\r\n    def camerax_version = \"1.1.0-beta01\"\r\n    implementation \"androidx.camera:camera-core:${camerax_version}\"\r\n    implementation \"androidx.camera:camera-camera2:${camerax_version}\"\r\n    implementation \"androidx.camera:camera-lifecycle:${camerax_version}\"\r\n    implementation \"androidx.camera:camera-video:${camerax_version}\"\r\n\r\n    implementation \"androidx.camera:camera-view:${camerax_version}\"\r\n    implementation \"androidx.camera:camera-extensions:${camerax_version}\"\r\n\r\n    // OSM Bonus Pack\r\n    implementation 'com.github.MKergall:osmbonuspack:6.8.0'\r\n\r\n\r\n    implementation \"androidx.biometric:biometric-ktx:1.2.0-alpha05\"\r\n    implementation 'androidx.biometric:biometric:1.1.0'\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/build.gradle	(date 1685470089413)
+@@ -66,6 +66,8 @@
+     implementation "androidx.camera:camera-view:${camerax_version}"
+     implementation "androidx.camera:camera-extensions:${camerax_version}"
+ 
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
++
+     // OSM Bonus Pack
+     implementation 'com.github.MKergall:osmbonuspack:6.8.0'
+ 
+Index: app/src/main/java/com/pontimovil/hypo/galleria.kt
+===================================================================
+diff --git a/app/src/main/java/com/pontimovil/hypo/galleria.kt b/app/src/main/java/com/pontimovil/hypo/galleria.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/pontimovil/hypo/galleria.kt	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ /dev/null	(revision af231d2e627356a536bba04393371dd66ffac8df)
+@@ -1,238 +0,0 @@
+-    package com.pontimovil.hypo
+-
+-    import android.Manifest
+-    import android.content.Context
+-    import android.content.Context.SENSOR_SERVICE
+-    import android.content.pm.PackageManager
+-    import android.database.Cursor
+-    import android.graphics.Bitmap
+-    import android.graphics.BitmapFactory
+-    import android.graphics.Canvas
+-    import android.graphics.ColorMatrix
+-    import android.graphics.ColorMatrixColorFilter
+-    import android.graphics.Paint
+-    import android.graphics.Rect
+-    import android.hardware.Sensor
+-    import android.hardware.SensorEvent
+-    import android.hardware.SensorEventListener
+-    import android.hardware.SensorManager
+-    import android.os.Bundle
+-    import android.os.Handler
+-    import android.os.Looper
+-    import android.provider.MediaStore
+-    import android.util.Log
+-    import android.view.LayoutInflater
+-    import android.view.View
+-    import android.view.ViewGroup
+-    import android.widget.LinearLayout
+-    import android.widget.Toast
+-    import androidx.core.app.ActivityCompat
+-    import androidx.core.content.ContextCompat
+-    import androidx.core.content.PermissionChecker.checkSelfPermission
+-    import androidx.fragment.app.Fragment
+-    import androidx.recyclerview.widget.GridLayoutManager
+-    import androidx.recyclerview.widget.RecyclerView
+-    import com.pontimovil.hypo.databinding.FragmentGalleriaBinding
+-    import kotlin.math.sqrt
+-
+-
+-    /**
+-     * An example full-screen fragment that shows and hides the system UI (i.e.
+-     * status bar and navigation/system bar) with user interaction.
+-     */
+-    class galleria : Fragment(), SensorEventListener {
+-        private val SHAKE_THRESHOLD_GRAVITY = 50.0f
+-        private var _binding: FragmentGalleriaBinding? = null
+-
+-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+-        // Request code for READ_EXTERNAL_STORAGE. It can be any number > 0.
+-        private val REQUEST_CODE_PERMISSIONS = 10
+-
+-        // Imagelayout
+-        private var imageLayout: RecyclerView? = null
+-        // Acelerometro
+-        private var mSensorManager: SensorManager? = null
+-        private var mSensor: Sensor? = null
+-
+-        // This property is only valid between onCreateView and
+-        // onDestroyView.
+-        private val binding get() = _binding!!
+-
+-        override fun onCreateView(
+-            inflater: LayoutInflater,
+-            container: ViewGroup?,
+-            savedInstanceState: Bundle?
+-        ): View? {
+-            _binding = FragmentGalleriaBinding.inflate(inflater, container, false)
+-            return binding.root
+-
+-        }
+-
+-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+-            super.onViewCreated(view, savedInstanceState)
+-            var permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
+-            var granted = checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
+-            Toast.makeText(requireContext(), "Permission: $permission", Toast.LENGTH_SHORT).show()
+-            if (granted == 0) {
+-                // run on ui thread
+-                Handler(Looper.getMainLooper()).post {
+-                    loadImages()
+-                }
+-            } else {
+-                ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+-            }
+-            // Get a reference to the system's sensor manager
+-            mSensorManager = requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager
+-
+-            // Get a reference to the accelerometer sensor
+-            mSensor = mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+-
+-            imageLayout = binding.imageLayout
+-
+-        }
+-
+-        private fun loadImages() {
+-            val images = mutableListOf<Bitmap>()
+-            val targetDirectory = "/Pictures/Hypo"
+-
+-            val imageProjection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA)
+-            val cursor: Cursor? = requireContext().contentResolver.query(
+-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+-                imageProjection,
+-                null,
+-                null,
+-                MediaStore.Images.Media.DATE_ADDED + " DESC"
+-            )
+-
+-            cursor?.use {
+-                while (cursor.moveToNext()) {
+-                    val imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+-                    if (imagePath.contains(targetDirectory)) {
+-                        Log.d("TAG", "loadImages: $imagePath")
+-                        // Load bitmaps with a third of the original size
+-                        val options = BitmapFactory.Options()
+-                        options.inSampleSize = 10
+-                        val bitmap = BitmapFactory.decodeFile(imagePath, options)
+-                        images.add(bitmap)
+-                    }
+-                }
+-            }
+-            val adapter = polaroidType(images)
+-            // Change the style of the images to 0 sat, 0 brightness, 0 contrast
+-            imageLayout?.layoutManager = GridLayoutManager(requireContext(), 3) // Change the number 3 to set the number of columns in the grid
+-            imageLayout?.addItemDecoration(SpaceItemDecoration(10))
+-            imageLayout?.adapter = adapter
+-
+-        }
+-
+-
+-        private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+-            ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+-        }
+-
+-        override fun onResume() {
+-            super.onResume()
+-
+-            // Register the sensor listener to listen for accelerometer events
+-            mSensorManager?.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL)
+-        }
+-
+-        override fun onPause() {
+-            super.onPause()
+-
+-            // Unregister the sensor listener to stop listening for accelerometer events
+-            mSensorManager?.unregisterListener(this)
+-        }
+-
+-        override fun onSensorChanged(event: SensorEvent) {
+-            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+-                val x = event.values[0]
+-                val y = event.values[1]
+-                val z = event.values[2]
+-
+-                var lastShakeTime = 0L
+-
+-                // Calculate the magnitude of acceleration using the Pythagorean theorem
+-                val acceleration = sqrt(x * x + y * y + z * z)
+-
+-                // Check if the acceleration exceeds the shake threshold
+-                if (acceleration > SHAKE_THRESHOLD_GRAVITY) {
+-                    val currentTime = System.currentTimeMillis()
+-
+-                    // Check if the last shake event was more than 500ms ago, to prevent multiple shake events from being triggered in rapid succession.
+-                    if (currentTime - lastShakeTime > 500) {
+-                        // Trigger the shake event
+-                        onShake()
+-                        lastShakeTime = currentTime
+-                    }
+-                }
+-            }
+-        }
+-
+-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+-            // Do nothing
+-        }
+-
+-        private fun onShake() {
+-            Toast.makeText(requireContext(), "Shake!", Toast.LENGTH_SHORT).show()
+-            changeImageStyle()
+-        }
+-
+-        private fun changeImageStyle() {
+-            val adapter = imageLayout?.adapter as? polaroidType ?: return
+-            adapter.applyStyleToImages()
+-            // Notify the adapter that the data has changed
+-            adapter.notifyDataSetChanged()
+-        }
+-
+-        override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+-            if (requestCode == REQUEST_CODE_PERMISSIONS) {
+-                if (allPermissionsGranted()) {
+-                    //loadImages()
+-                } else {
+-                    Toast.makeText(requireContext(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
+-                }
+-            }
+-        }
+-
+-
+-        private fun createNewLinearLayout(): LinearLayout {
+-            val linearLayout = LinearLayout(requireContext())
+-            linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+-            linearLayout.orientation = LinearLayout.HORIZONTAL
+-            return linearLayout
+-        }
+-
+-
+-
+-        companion object {
+-            fun newInstance(): Fragment {
+-                return galleria()
+-            }
+-        }
+-
+-        override fun onDestroyView() {
+-            super.onDestroyView()
+-            _binding = null
+-        }
+-
+-        class SpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+-            override fun getItemOffsets(
+-                outRect: Rect, view: View,
+-                parent: RecyclerView, state: RecyclerView.State
+-            ) {
+-                outRect.left = space
+-                outRect.right = space
+-                outRect.bottom = space
+-
+-                // Add top margin only for the first item to avoid double space between items
+-                if (parent.getChildLayoutPosition(view) == 0) {
+-                    outRect.top = space
+-                }
+-            }
+-
+-
+-        }
+-
+-    }
+-
+Index: app/src/main/res/layout/activity_polaroid_type.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n\r\n    android:layout_margin=\"10dp\"\r\n    tools:context=\".polaroidType\">\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imagen\"\r\n        android:layout_width=\"95dp\"\r\n        android:layout_height=\"99dp\"\r\n        android:scaleType=\"centerCrop\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintDimensionRatio=\"w,100:110\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.17000002\"\r\n        tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imageView4\"\r\n        android:layout_width=\"110dp\"\r\n        android:layout_height=\"132dp\"\r\n        android:src=\"@drawable/polaroid_frame_transparent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_polaroid_type.xml b/app/src/main/res/layout/activity_polaroid_type.xml
+--- a/app/src/main/res/layout/activity_polaroid_type.xml	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/src/main/res/layout/activity_polaroid_type.xml	(date 1685470089420)
+@@ -31,4 +31,6 @@
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+ 
++
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+Index: app/src/main/res/layout/fragment_image_overlay_dialog.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_image_overlay_dialog.xml b/app/src/main/res/layout/fragment_image_overlay_dialog.xml
+new file mode 100644
+--- /dev/null	(date 1685470089420)
++++ b/app/src/main/res/layout/fragment_image_overlay_dialog.xml	(date 1685470089420)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
++    android:id="@+id/fullscreen_image"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:scaleType="fitCenter" />
+Index: app/src/main/java/com/pontimovil/hypo/cameraFrames/PolaroidSnaptouch.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pontimovil.hypo.cameraFrames\r\n\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Toast\r\nimport androidx.camera.core.ImageCapture\r\nimport androidx.core.app.ActivityCompat\r\nimport com.pontimovil.hypo.databinding.FragmentPolaroidSnaptouchBinding\r\nimport java.util.concurrent.ExecutorService\r\n\r\nimport android.Manifest\r\nimport android.content.ContentValues\r\nimport android.content.Context\r\nimport android.content.pm.PackageManager\r\nimport android.os.Build\r\nimport android.provider.MediaStore\r\nimport androidx.core.content.ContextCompat\r\nimport java.util.concurrent.Executors\r\nimport androidx.camera.lifecycle.ProcessCameraProvider\r\nimport androidx.camera.core.Preview\r\nimport androidx.camera.core.CameraSelector\r\nimport android.util.Log\r\nimport androidx.camera.core.ImageAnalysis\r\nimport androidx.camera.core.ImageCaptureException\r\nimport androidx.camera.core.ImageProxy\r\nimport java.nio.ByteBuffer\r\nimport java.text.SimpleDateFormat\r\nimport java.util.Locale\r\n\r\n// TODO: Rename parameter arguments, choose names that match\r\n// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\n/**\r\n * A simple [Fragment] subclass.\r\n * Use the [polaroidSnaptouch.newInstance] factory method to\r\n * create an instance of this fragment.\r\n */\r\nclass polaroidSnaptouch : Fragment() {\r\n\r\n    private var imageCapture: ImageCapture? = null\r\n\r\n    private lateinit var cameraExecutor: ExecutorService\r\n    private val TAG = \"Hypo\"\r\n    private val FILENAME_FORMAT = \"yyyy-MM-dd-HH-mm-ss-SSS\"\r\n\r\n\r\n    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)\r\n    private val REQUEST_CODE_PERMISSIONS = 10\r\n    // TODO: Rename and change types of parameters\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    private lateinit var binding: FragmentPolaroidSnaptouchBinding\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        arguments?.let {\r\n            param1 = it.getString(ARG_PARAM1)\r\n            param2 = it.getString(ARG_PARAM2)\r\n        }\r\n\r\n    }\r\n\r\n    private class LuminosityAnalyzer(private val listener: (Any) -> Int) : ImageAnalysis.Analyzer {\r\n\r\n        private fun ByteBuffer.toByteArray(): ByteArray {\r\n            rewind()    // Rewind the buffer to zero\r\n            val data = ByteArray(remaining())\r\n            get(data)   // Copy the buffer into a byte array\r\n            return data // Return the byte array\r\n        }\r\n\r\n        override fun analyze(image: ImageProxy) {\r\n\r\n            val buffer = image.planes[0].buffer\r\n            val data = buffer.toByteArray()\r\n            val pixels = data.map { it.toInt() and 0xFF }\r\n            val luma = pixels.average()\r\n\r\n            listener(luma)\r\n\r\n            image.close()\r\n        }\r\n    }\r\n\r\n\r\n    private fun startCamera() {\r\n        val context = requireContext()\r\n        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)\r\n\r\n        cameraProviderFuture.addListener({\r\n            // Used to bind the lifecycle of cameras to the lifecycle owner\r\n            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()\r\n\r\n            // Preview\r\n            val preview = Preview.Builder()\r\n                .build()\r\n                .also {\r\n                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)\r\n                }\r\n\r\n            imageCapture = ImageCapture.Builder()\r\n                .build()\r\n\r\n            val imageAnalyzer = ImageAnalysis.Builder()\r\n                .build()\r\n                .also {\r\n                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->\r\n                        Log.v(\"Lumin\", \"Average luminosity: $luma\")\r\n                    })\r\n                }\r\n\r\n            // Select back camera as a default\r\n            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA\r\n\r\n            try {\r\n                // Unbind use cases before rebinding\r\n                cameraProvider.unbindAll()\r\n\r\n                // Bind use cases to camera\r\n                cameraProvider.bindToLifecycle(\r\n                    this, cameraSelector, preview, imageCapture, imageAnalyzer)\r\n\r\n            } catch(exc: Exception) {\r\n                Log.e(TAG, \"Use case binding failed\", exc)\r\n            }\r\n\r\n        }, ContextCompat.getMainExecutor(context))\r\n    }\r\n\r\n    private fun allPermissionsGranted(): Boolean {\r\n        for (permission in REQUIRED_PERMISSIONS) {\r\n            if (ContextCompat.checkSelfPermission(\r\n                    requireContext(), permission\r\n                ) != PackageManager.PERMISSION_GRANTED\r\n            ) {\r\n                return false\r\n            }\r\n        }\r\n        return true\r\n    }\r\n\r\n    override fun onRequestPermissionsResult(\r\n        requestCode: Int, permissions: Array<String>, grantResults:\r\n        IntArray) {\r\n        if (requestCode == REQUEST_CODE_PERMISSIONS) {\r\n            if (allPermissionsGranted()) {\r\n                startCamera()\r\n            } else {\r\n                Toast.makeText(\r\n                    activity,\r\n                    \"Permissions not granted by the user.\",\r\n                    Toast.LENGTH_SHORT\r\n                ).show()\r\n                activity?.finish()\r\n            }\r\n        }\r\n    }\r\n\r\n    override fun onDestroy() {\r\n        super.onDestroy()\r\n        cameraExecutor.shutdown()\r\n    }\r\n\r\n    override fun onPause() {\r\n        super.onPause()\r\n        cameraExecutor.shutdown()\r\n    }\r\n\r\n    private fun takePhoto() {\r\n        // Get a stable reference of the modifiable image capture use case\r\n        Log.d(TAG, \"takePhoto\")\r\n        val imageAnalyzer = ImageAnalysis.Builder()\r\n            .build()\r\n            .also {\r\n                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->\r\n                    Log.d(TAG, \"Average luminosity: $luma\")\r\n                })\r\n            }\r\n        val imageCapture = imageCapture ?: return\r\n        Log.d(TAG, \"imageCapture\")\r\n        Toast.makeText(activity, \"Taking photo\", Toast.LENGTH_SHORT).show()\r\n        val context = requireContext()\r\n        val contentResolver = context.contentResolver\r\n        // Create time stamped name and MediaStore entry.\r\n        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())\r\n        val contentValues = ContentValues().apply {\r\n            put(MediaStore.MediaColumns.DISPLAY_NAME, name)\r\n            put(MediaStore.MediaColumns.MIME_TYPE, \"image/jpeg\")\r\n            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {\r\n                put(MediaStore.Images.Media.RELATIVE_PATH, \"Pictures/Hypo\") //\r\n            }\r\n        }\r\n\r\n        // Create output options object which contains file + metadata\r\n        val outputOptions = ImageCapture.OutputFileOptions\r\n            .Builder(contentResolver,\r\n                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,\r\n                contentValues)\r\n            .build()\r\n\r\n        // Set up image capture listener, which is triggered after photo has\r\n        // been taken\r\n        imageCapture.takePicture(\r\n            outputOptions,\r\n            ContextCompat.getMainExecutor(context),\r\n            object : ImageCapture.OnImageSavedCallback {\r\n                override fun onError(exc: ImageCaptureException) {\r\n                    Log.e(TAG, \"Photo capture failed: ${exc.message}\", exc)\r\n                }\r\n\r\n                override fun\r\n                        onImageSaved(output: ImageCapture.OutputFileResults){\r\n                    val msg = \"Photo capture succeeded: ${output.savedUri}\"\r\n                    Log.d(TAG, msg)\r\n                    listener?.onPictureTaken()\r\n                }\r\n            }\r\n        )\r\n    }\r\n\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        // Inflate the layout for this fragment\r\n        binding = FragmentPolaroidSnaptouchBinding.inflate(layoutInflater)\r\n\r\n        binding.shutter.setOnClickListener {\r\n            takePhoto()\r\n        }\r\n\r\n        binding.flash.setOnClickListener {\r\n            Toast.makeText(activity, \"Flash!\", Toast.LENGTH_SHORT).show()\r\n        }\r\n\r\n        binding.flip.setOnClickListener {\r\n            Toast.makeText(activity, \"Switch!\", Toast.LENGTH_SHORT).show()\r\n        }\r\n        if (allPermissionsGranted()) {\r\n            startCamera()\r\n        } else {\r\n            ActivityCompat.requestPermissions(\r\n                requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS\r\n            )\r\n        }\r\n\r\n        cameraExecutor = Executors.newSingleThreadExecutor()\r\n        return binding.root\r\n    }\r\n\r\n    companion object {\r\n        /**\r\n         * Use this factory method to create a new instance of\r\n         * this fragment using the provided parameters.\r\n         *\r\n         * @param param1 Parameter 1.\r\n         * @param param2 Parameter 2.\r\n         * @return A new instance of fragment polaroidSnaptouch.\r\n         */\r\n        // TODO: Rename and change types and number of parameters\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            polaroidSnaptouch().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n    }\r\n\r\n    private var listener: OnPictureTakenListener? = null\r\n\r\n    interface OnPictureTakenListener {\r\n        fun onPictureTaken()\r\n    }\r\n\r\n    override fun onAttach(context: Context) {\r\n        super.onAttach(context)\r\n        if (parentFragment is OnPictureTakenListener) {\r\n            listener = parentFragment as OnPictureTakenListener\r\n        }\r\n    }\r\n\r\n\r\n}\r\n\r\nclass LumaListener {\r\n    operator fun invoke(luma: Double) {\r\n        //Log.d(\"LumaListener\", \"Average luminosity: $luma\")\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pontimovil/hypo/cameraFrames/PolaroidSnaptouch.kt b/app/src/main/java/com/pontimovil/hypo/cameraFrames/PolaroidSnaptouch.kt
+--- a/app/src/main/java/com/pontimovil/hypo/cameraFrames/PolaroidSnaptouch.kt	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/src/main/java/com/pontimovil/hypo/cameraFrames/PolaroidSnaptouch.kt	(date 1685470089416)
+@@ -294,3 +294,4 @@
+         //Log.d("LumaListener", "Average luminosity: $luma")
+     }
+ }
++
+Index: app/src/main/java/com/pontimovil/hypo/ImageOverlayDialogFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pontimovil/hypo/ImageOverlayDialogFragment.kt b/app/src/main/java/com/pontimovil/hypo/ImageOverlayDialogFragment.kt
+new file mode 100644
+--- /dev/null	(date 1685470089415)
++++ b/app/src/main/java/com/pontimovil/hypo/ImageOverlayDialogFragment.kt	(date 1685470089415)
+@@ -0,0 +1,38 @@
++package com.pontimovil.hypo
++
++import android.graphics.Bitmap
++import android.os.Bundle
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import android.widget.ImageView
++import androidx.fragment.app.DialogFragment
++
++class ImageOverlayDialogFragment : DialogFragment() {
++    companion object {
++        private const val ARG_IMAGE = "arg_image"
++
++        fun newInstance(image: Bitmap): ImageOverlayDialogFragment {
++            val fragment = ImageOverlayDialogFragment()
++            val args = Bundle()
++            args.putParcelable(ARG_IMAGE, image)
++            fragment.arguments = args
++            return fragment
++        }
++    }
++
++    private lateinit var image: Bitmap
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
++        image = arguments?.getParcelable(ARG_IMAGE)!!
++    }
++
++    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
++        val view = inflater.inflate(R.layout.fragment_image_overlay_dialog, container, false)
++        val imageView = view.findViewById<ImageView>(R.id.fullscreen_image)
++        imageView.setImageBitmap(image)
++        return view
++    }
++}
+Index: app/src/main/java/com/pontimovil/hypo/rollSelectorModern.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pontimovil.hypo\r\n\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.ImageView\r\nimport android.widget.Toast\r\nimport com.pontimovil.hypo.databinding.FragmentRollSelectorModernBinding\r\n\r\n// TODO: Rename parameter arguments, choose names that match\r\n// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\n/**\r\n * A simple [Fragment] subclass.\r\n * Use the [rollSelectorModern.newInstance] factory method to\r\n * create an instance of this fragment.\r\n */\r\nclass rollSelectorModern : Fragment() {\r\n    // TODO: Rename and change types of parameters\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    private lateinit var binding: FragmentRollSelectorModernBinding\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        arguments?.let {\r\n            param1 = it.getString(ARG_PARAM1)\r\n            param2 = it.getString(ARG_PARAM2)\r\n        }\r\n\r\n    }\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        Log.d(\"RollSelectorModern\", \"Creating view\")\r\n\r\n        // Inflate the layout for this fragment\r\n        return inflater.inflate(R.layout.fragment_roll_selector_modern, container, false)\r\n    }\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n        binding = FragmentRollSelectorModernBinding.bind(view)\r\n\r\n        binding.photoWidget.setOnClickListener {\r\n            // Crear una instancia del fragmento de la galería\r\n            val galleryFragment = galleria.newInstance()\r\n            // Obtener el administrador de fragmentos\r\n            val fragmentManager = requireActivity().supportFragmentManager\r\n            // Abrir el fragmento de la galería en la actividad actual\r\n            fragmentManager.beginTransaction()\r\n                .replace(R.id.mainCameraFragmentContainer, galleryFragment)\r\n                .addToBackStack(null)\r\n                .commit()\r\n        }\r\n\r\n    }\r\n\r\n    companion object {\r\n        /**\r\n         * Use this factory method to create a new instance of\r\n         * this fragment using the provided parameters.\r\n         *\r\n         * @param param1 Parameter 1.\r\n         * @param param2 Parameter 2.\r\n         * @return A new instance of fragment rollSelectorModern.\r\n         */\r\n        // TODO: Rename and change types and number of parameters\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            rollSelectorModern().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n\r\n\r\n    }\r\n\r\n    // function to udpdate the linear layout with the new roll\r\n    fun updateRoll(roll: Roll) {\r\n        Log.d(\"RollSelectorModern\", \"Updating roll\")\r\n        val images = roll.images\r\n        val layout = binding.photoLayout\r\n        for (image in images) {\r\n            val imageView = ImageView(context)\r\n            imageView.setImageURI(image)\r\n            layout.addView(imageView)\r\n        }\r\n    }\r\n}\r\n\r\nprivate fun ImageView.setImageURI(image: String) {\r\n    this.setImageURI(image)\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pontimovil/hypo/rollSelectorModern.kt b/app/src/main/java/com/pontimovil/hypo/rollSelectorModern.kt
+--- a/app/src/main/java/com/pontimovil/hypo/rollSelectorModern.kt	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/src/main/java/com/pontimovil/hypo/rollSelectorModern.kt	(date 1685470089418)
+@@ -1,5 +1,6 @@
+ package com.pontimovil.hypo
+ 
++import android.net.Uri
+ import android.os.Bundle
+ import android.util.Log
+ import androidx.fragment.app.Fragment
+@@ -92,7 +93,7 @@
+         val layout = binding.photoLayout
+         for (image in images) {
+             val imageView = ImageView(context)
+-            imageView.setImageURI(image)
++            imageView.setImageURI(Uri.parse(image))
+             layout.addView(imageView)
+         }
+     }
+Index: app/src/main/java/com/pontimovil/hypo/polaroidType.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pontimovil.hypo\r\n\r\nimport android.graphics.Bitmap\r\nimport android.graphics.ColorMatrix\r\nimport android.graphics.ColorMatrixColorFilter\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.ImageView\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.pontimovil.hypo.databinding.ActivityPolaroidTypeBinding\r\n\r\nclass polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType.ViewHolder>() {\r\n\r\n\r\n    private lateinit var binding: ActivityPolaroidTypeBinding\r\n    private lateinit var imagen: ImageView\r\n    val imageViews = mutableListOf<ImageView>()\r\n    var isStyleApplied = false\r\n\r\n\r\n    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {\r\n    }\r\n\r\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): polaroidType.ViewHolder {\r\n        var layoutInflater = LayoutInflater.from(parent.context)\r\n        binding = ActivityPolaroidTypeBinding.inflate(layoutInflater)\r\n        imagen = binding.imagen\r\n        return ViewHolder(binding.root)\r\n    }\r\n\r\n    override fun onBindViewHolder(holder: polaroidType.ViewHolder, position: Int) {\r\n        binding.imagen.setImageBitmap(images[position])\r\n        val imageView = holder.itemView.findViewById<ImageView>(binding.imagen.id)\r\n\r\n        if (isStyleApplied) {\r\n            val colorMatrix = ColorMatrix()\r\n            colorMatrix.setSaturation(0f)\r\n\r\n            val scale = 1f\r\n            val translate = 0f\r\n            colorMatrix.set(\r\n                floatArrayOf(\r\n                    scale, 0f, 0f, 0f, translate,\r\n                    0f, scale, 0f, 0f, translate,\r\n                    0f, 0f, scale, 0f, translate,\r\n                    0f, 0f, 0f, 1f, 0f\r\n                )\r\n            )\r\n\r\n            val filter = ColorMatrixColorFilter(colorMatrix)\r\n            imageView.colorFilter = filter\r\n        } else {\r\n            imageView.clearColorFilter()\r\n        }\r\n\r\n        imageViews.add(imageView)\r\n\r\n    }\r\n\r\n\r\n    override fun getItemCount(): Int {\r\n        return images.size\r\n    }\r\n\r\n    fun applyStyleToImages() {\r\n        isStyleApplied = !isStyleApplied\r\n        notifyDataSetChanged()\r\n    }\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pontimovil/hypo/polaroidType.kt b/app/src/main/java/com/pontimovil/hypo/polaroidType.kt
+--- a/app/src/main/java/com/pontimovil/hypo/polaroidType.kt	(revision af231d2e627356a536bba04393371dd66ffac8df)
++++ b/app/src/main/java/com/pontimovil/hypo/polaroidType.kt	(date 1685470089417)
+@@ -1,5 +1,6 @@
+ package com.pontimovil.hypo
+ 
++import android.content.ContextWrapper
+ import android.graphics.Bitmap
+ import android.graphics.ColorMatrix
+ import android.graphics.ColorMatrixColorFilter
+@@ -7,20 +8,18 @@
+ import android.view.View
+ import android.view.ViewGroup
+ import android.widget.ImageView
++import androidx.fragment.app.FragmentActivity
+ import androidx.recyclerview.widget.RecyclerView
+ import com.pontimovil.hypo.databinding.ActivityPolaroidTypeBinding
+ 
+-class polaroidType(val images: List<Bitmap>) : RecyclerView.Adapter<polaroidType.ViewHolder>() {
+-
++class polaroidType(val imagePaths: MutableList<String>, var images: List<Bitmap>) : RecyclerView.Adapter<polaroidType.ViewHolder>() {
+ 
+     private lateinit var binding: ActivityPolaroidTypeBinding
+     private lateinit var imagen: ImageView
+     val imageViews = mutableListOf<ImageView>()
+     var isStyleApplied = false
+ 
+-
+-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+-    }
++    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+ 
+     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): polaroidType.ViewHolder {
+         var layoutInflater = LayoutInflater.from(parent.context)
+@@ -30,9 +29,24 @@
+     }
+ 
+     override fun onBindViewHolder(holder: polaroidType.ViewHolder, position: Int) {
++
+         binding.imagen.setImageBitmap(images[position])
+         val imageView = holder.itemView.findViewById<ImageView>(binding.imagen.id)
+ 
++        imageView.setOnClickListener {
++            var context = imageView.context
++            while (context is ContextWrapper) {
++                if (context is FragmentActivity) {
++                    val dialog = ImageOverlayDialogFragment.newInstance(images[position])
++                    dialog.show(context.supportFragmentManager, "ImageOverlay")
++                    return@setOnClickListener
++                } else {
++                    context = context.baseContext
++                }
++            }
++        }
++
++
+         if (isStyleApplied) {
+             val colorMatrix = ColorMatrix()
+             colorMatrix.setSaturation(0f)
+@@ -54,10 +68,10 @@
+             imageView.clearColorFilter()
+         }
+ 
++
++
+         imageViews.add(imageView)
+-
+     }
+-
+ 
+     override fun getItemCount(): Int {
+         return images.size
+@@ -67,7 +81,4 @@
+         isStyleApplied = !isStyleApplied
+         notifyDataSetChanged()
+     }
+-
+-
+-
+-}
+\ No newline at end of file
++}
