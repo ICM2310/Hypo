@@ -30,6 +30,9 @@
             android:name=".polaroidType"
             android:exported="false" />
         <activity
+            android:name=".ChatFragment"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
