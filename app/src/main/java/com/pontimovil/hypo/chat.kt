@@ -15,13 +15,13 @@ import com.pontimovil.hypo.modelo.Usuario
 class chat : Fragment() {
     private lateinit var binding: FragmentChatBinding
     private lateinit var userList: ArrayList<Usuario>
-    private lateinit var adapter: UserAdapter
+    private lateinit var adapter: User_Adapter
     private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userList = ArrayList()
-        adapter = UserAdapter(userList)
+        adapter = User_Adapter(userList)
     }
 
     override fun onCreateView(

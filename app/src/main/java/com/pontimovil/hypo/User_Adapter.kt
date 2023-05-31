@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pontimovil.hypo.modelo.Usuario
 
-class UserAdapter(private val userList: ArrayList<Usuario>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class User_Adapter(private val userList: ArrayList<Usuario>) : RecyclerView.Adapter<User_Adapter.UserViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.fragment_layoutchat, parent, false)
