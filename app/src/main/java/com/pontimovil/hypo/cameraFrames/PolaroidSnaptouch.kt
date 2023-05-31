@@ -15,6 +15,10 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.ContextCompat
@@ -29,6 +33,13 @@ import androidx.camera.core.ImageProxy
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
+import android.graphics.*
+import android.media.ExifInterface
+import com.pontimovil.hypo.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,13 +51,23 @@ private const val ARG_PARAM2 = "param2"
  * Use the [polaroidSnaptouch.newInstance] factory method to
  * create an instance of this fragment.
  */
-class polaroidSnaptouch : Fragment() {
+class polaroidSnaptouch : Fragment(), SensorEventListener {
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var cameraExecutor: ExecutorService
     private val TAG = "Hypo"
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+
+    private var sensorManager: SensorManager? = null
+    private var gyroscope: Sensor? = null
+
+    // Global variables to hold the last gyroscope readings
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
+    private var lastZ: Float = 0f
+
+    private var brightestPixelPosition = Point(0, 0)
 
 
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -64,7 +85,7 @@ class polaroidSnaptouch : Fragment() {
 
     }
 
-    private class LuminosityAnalyzer(private val listener: (Any) -> Int) : ImageAnalysis.Analyzer {
+    private class LuminosityAnalyzer(private val listener: (Point) -> Unit) : ImageAnalysis.Analyzer {
 
         private fun ByteBuffer.toByteArray(): ByteArray {
             rewind()    // Rewind the buffer to zero
@@ -77,14 +98,81 @@ class polaroidSnaptouch : Fragment() {
 
             val buffer = image.planes[0].buffer
             val data = buffer.toByteArray()
-            val pixels = data.map { it.toInt() and 0xFF }
-            val luma = pixels.average()
+            val width = image.width
+            val height = image.height
 
-            listener(luma)
+            var maxLuma = 0
+            var maxPos = Point(0, 0)
+
+            for (y in 0 until height) {
+                for (x in 0 until width) {
+                    val pixel = data[y * width + x]
+                    val luma = pixel.toInt() and 0xFF
+
+                    if (luma > maxLuma) {
+                        maxLuma = luma
+                        maxPos = Point(x, y)
+                    }
+                }
+            }
+
+            listener(maxPos)
 
             image.close()
         }
     }
+
+
+
+    private fun applyLensFlareEffect(bitmap: Bitmap): Bitmap {
+        Log.d("ApplyLensFlareEffect", "applyLensFlareEffect")
+        val flare = BitmapFactory.decodeResource(resources, R.drawable.lens_flare)
+
+        // Create a new bitmap with the same dimensions as the original one
+        val outputBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val canvas = Canvas(outputBitmap)
+        Log.d("ApplyLensFlareEffect", "canvas: $canvas")
+
+        // Draw the original bitmap on the canvas
+        canvas.drawBitmap(bitmap, Matrix(), null)
+        Log.d("ApplyLensFlareEffect", "bitmap: $bitmap")
+
+        // Calculate lens flare position based on gyroscope data
+        val flareX = (lastX / Math.PI * bitmap.width).toInt()
+        val flareY = (lastY / Math.PI * bitmap.height).toInt()
+        Log.d("ApplyLensFlareEffect", "flareX: $flareX")
+        Log.d("ApplyLensFlareEffect", "flareY: $flareY")
+
+        Log.d("ApplyLensFlareEffect", "lastX: $lastX")
+        Log.d("ApplyLensFlareEffect", "lastY: $lastY")
+        Log.d("ApplyLensFlareEffect", "lastZ: $lastZ")
+
+        // Scale lens flare image
+        val flareSizeMultiplier = 0.5  // Adjust this value to change flare size
+        val scaledFlareWidth = (flare.width * flareSizeMultiplier).toInt()
+        val scaledFlareHeight = (flare.height * flareSizeMultiplier).toInt()
+        Log.d("ApplyLensFlareEffect", "scaledFlareWidth: $scaledFlareWidth")
+        Log.d("ApplyLensFlareEffect", "scaledFlareHeight: $scaledFlareHeight")
+
+        val paint = Paint()
+        for (i in 1..3) {
+            if (scaledFlareWidth > 0 && scaledFlareHeight > 0) {
+                val scaledFlare = Bitmap.createScaledBitmap(flare, scaledFlareWidth * i * 3, scaledFlareHeight * i * 3, true)
+
+                // Set transparency of the lens flare
+                paint.alpha = 255 / (i * 2) // Reduce transparency for larger flares
+
+                // Draw the lens flare on the canvas
+                canvas.drawBitmap(scaledFlare, (flareX - scaledFlareWidth / 2).toFloat(), (flareY - scaledFlareHeight / 2).toFloat(), paint)
+            }
+        }
+
+        return outputBitmap
+    }
+
+
+
+
 
 
     private fun startCamera() {
@@ -143,6 +231,25 @@ class polaroidSnaptouch : Fragment() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        sensorManager?.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cameraExecutor.shutdown()
+        sensorManager?.unregisterListener(this)
+    }
+
+    private fun applyLensFlareEffect(x: Float, y: Float, z: Float) {
+        // Apply the lens flare effect using the gyroscope values
+        // You can modify this method to customize the lens flare effect based on your requirements
+        // For example, you can adjust the brightness or position of the lens flare based on the gyroscope values
+    }
+
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray) {
@@ -165,19 +272,15 @@ class polaroidSnaptouch : Fragment() {
         cameraExecutor.shutdown()
     }
 
-    override fun onPause() {
-        super.onPause()
-        cameraExecutor.shutdown()
-    }
-
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         Log.d(TAG, "takePhoto")
         val imageAnalyzer = ImageAnalysis.Builder()
             .build()
             .also {
-                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                    Log.d(TAG, "Average luminosity: $luma")
+                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { pos ->
+                    Log.d(TAG, "Brightest pixel position: $pos")
+                    brightestPixelPosition = pos
                 })
             }
         val imageCapture = imageCapture ?: return
@@ -212,16 +315,44 @@ class polaroidSnaptouch : Fragment() {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Log.d(TAG, msg)
-                    listener?.onPictureTaken()
+                override fun onImageSaved(output: ImageCapture.OutputFileResults){
+                    CoroutineScope(Dispatchers.IO).launch{
+                        val msg = "Photo capture succeeded: ${output.savedUri}"
+                        Log.d(TAG, msg)
+
+                        // Load the saved image into a bitmap
+                        val resolver = requireActivity().contentResolver
+                        val originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(output.savedUri!!))
+
+                        // Apply the lens flare effect
+                        var bitmapWithFlare = applyLensFlareEffect(originalBitmap)
+
+                        // Rotate the new image 90 degrees to the right
+                        bitmapWithFlare = rotateBitmap(bitmapWithFlare, 90f)
+
+                        // Create a new filename and ContentValues for the new image
+                        val newName = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis()) + "_edited"
+                        val newContentValues = ContentValues().apply {
+                            put(MediaStore.MediaColumns.DISPLAY_NAME, newName)
+                            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Hypo")
+                            }
+                        }
+
+                        // Save the new bitmap to a new file
+                        val newUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newContentValues)
+                        val fos = newUri?.let { resolver.openOutputStream(it) }
+                        fos?.use {
+                            bitmapWithFlare.compress(Bitmap.CompressFormat.JPEG, 100, it)
+                        }
+
+                        listener?.onPictureTaken()
+                    }
                 }
             }
         )
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -248,6 +379,9 @@ class polaroidSnaptouch : Fragment() {
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
+
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        gyroscope = sensorManager?.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         return binding.root
@@ -284,8 +418,36 @@ class polaroidSnaptouch : Fragment() {
         if (parentFragment is OnPictureTakenListener) {
             listener = parentFragment as OnPictureTakenListener
         }
+        sensorManager?.unregisterListener(this) // Unregister the listener from previous fragment
     }
 
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
+            // Access gyroscope values
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+
+            // Update the last gyroscope readings
+            lastX = x
+            lastY = y
+            lastZ = z
+
+            // Apply lens flare effect based on gyroscope values
+            applyLensFlareEffect(x, y, z)
+        }
+    }
+
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Do nothing
+    }
+
+    private fun rotateBitmap(source: Bitmap, angle: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    }
 
 }
 
