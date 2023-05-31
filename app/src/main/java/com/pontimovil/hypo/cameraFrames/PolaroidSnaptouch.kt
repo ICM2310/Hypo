@@ -15,6 +15,10 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.ContextCompat
@@ -40,13 +44,16 @@ private const val ARG_PARAM2 = "param2"
  * Use the [polaroidSnaptouch.newInstance] factory method to
  * create an instance of this fragment.
  */
-class polaroidSnaptouch : Fragment() {
+class polaroidSnaptouch : Fragment(), SensorEventListener {
 
     private var imageCapture: ImageCapture? = null
 
     private lateinit var cameraExecutor: ExecutorService
     private val TAG = "Hypo"
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+
+    private var sensorManager: SensorManager? = null
+    private var gyroscope: Sensor? = null
 
 
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -143,6 +150,25 @@ class polaroidSnaptouch : Fragment() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        sensorManager?.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cameraExecutor.shutdown()
+        sensorManager?.unregisterListener(this)
+    }
+
+    private fun applyLensFlareEffect(x: Float, y: Float, z: Float) {
+        // Apply the lens flare effect using the gyroscope values
+        // You can modify this method to customize the lens flare effect based on your requirements
+        // For example, you can adjust the brightness or position of the lens flare based on the gyroscope values
+    }
+
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray) {
@@ -162,11 +188,6 @@ class polaroidSnaptouch : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        cameraExecutor.shutdown()
-    }
-
-    override fun onPause() {
-        super.onPause()
         cameraExecutor.shutdown()
     }
 
@@ -249,6 +270,9 @@ class polaroidSnaptouch : Fragment() {
             )
         }
 
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        gyroscope = sensorManager?.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+
         cameraExecutor = Executors.newSingleThreadExecutor()
         return binding.root
     }
@@ -284,6 +308,23 @@ class polaroidSnaptouch : Fragment() {
         if (parentFragment is OnPictureTakenListener) {
             listener = parentFragment as OnPictureTakenListener
         }
+        sensorManager?.unregisterListener(this) // Unregister the listener from previous fragment
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
+            // Access gyroscope values
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+
+            // Apply lens flare effect based on gyroscope values
+            applyLensFlareEffect(x, y, z)
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Do nothing
     }
 
 
